@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<clientesWrap>
+    <cliente id="1">
+        <dni>12345678A</dni>
+        <nombre>Juan Perez</nombre>
+        <telefono>654321987</telefono>
+        <email>juan.perez@example.com</email>
+        <password>password123</password>
+        <admin>false</admin>
+        <direccion>Calle Falsa 123</direccion>
+    </cliente>
+    <cliente id="2">
+        <dni>87654321B</dni>
+        <nombre>Maria Garcia</nombre>
+        <telefono>612345678</telefono>
+        <email>maria.garcia@example.com</email>
+        <password>password456</password>
+        <admin>false</admin>
+        <direccion>Avenida Siempreviva 742</direccion>
+    </cliente>
+    <cliente id="3">
+        <dni>11223344C</dni>
+        <nombre>Carlos Lopez</nombre>
+        <telefono>698765432</telefono>
+        <email>carlos.lopez@example.com</email>
+        <password>password789</password>
+        <admin>false</admin>
+        <direccion>Paseo de la Reforma 100</direccion>
+    </cliente>
+    <cliente id="4">
+        <dni>55667788D</dni>
+        <nombre>Ana Martinez</nombre>
+        <telefono>622334455</telefono>
+        <email>ana.martinez@example.com</email>
+        <password>password012</password>
+        <admin>false</admin>
+        <direccion>Calle Principal 456</direccion>
+    </cliente>
+</clientesWrap>

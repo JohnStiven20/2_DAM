@@ -1,0 +1,12 @@
+app\Modelo\ClientesWrap.class
+app\Modelo\Pedido.class
+app\Modelo\Pedido$EstadoPedido.class
+app\Modelo\Cliente.class
+app\Controladores\ContraladorPedido.class
+app\Modelo\Ingrediente.class
+app\Modelo\LineaPedido.class
+app\Modelo\Pasta.class
+app\Modelo\Pizza.class
+app\Modelo\Bebida.class
+app\Modelo\Producto.class
+app\Controladores\ControladorCliente.class
