@@ -12,6 +12,7 @@ import jakarta.persistence.Transient;
 
 
 @Entity
+//@Table(name = "cliente") // Asegúrate de que coincida con el nombre real de la tabla en la base de datos
 public class Cliente implements  Pagable {
 
     @Id

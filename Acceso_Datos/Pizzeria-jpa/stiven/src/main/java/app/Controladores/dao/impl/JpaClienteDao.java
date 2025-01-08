@@ -21,7 +21,8 @@ public class JpaClienteDao implements ClienteDao {
     public void delete(Cliente cliente) throws SQLException {
         try(EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
-            entityManager.remove(cliente);
+            Cliente managedCliente = entityManager.contains(cliente) ? cliente : entityManager.merge(cliente);
+            entityManager.remove(managedCliente);
             entityManager.getTransaction().commit();
             entityManager.close();
         } 
@@ -34,7 +35,6 @@ public class JpaClienteDao implements ClienteDao {
             entityManager.merge(cliente);
             entityManager.getTransaction().commit();
             entityManager.close();
-
         } 
     }
 
@@ -43,7 +43,7 @@ public class JpaClienteDao implements ClienteDao {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             Cliente cliente = entityManager
-            .createQuery("SELECT c FROM cliente c WHERE c.email = :email", Cliente.class)
+            .createQuery("SELECT c FROM Cliente c WHERE c.email = :email", Cliente.class)
             .setParameter("email", email)
             .getSingleResult();
             entityManager.close();
@@ -56,7 +56,7 @@ public class JpaClienteDao implements ClienteDao {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             List<Cliente> listaCliente = entityManager
-            .createQuery("SELECT c FROM cliente c", Cliente.class)
+            .createQuery("SELECT c FROM Cliente c", Cliente.class)
             .getResultList();
             entityManager.close();
             return listaCliente;

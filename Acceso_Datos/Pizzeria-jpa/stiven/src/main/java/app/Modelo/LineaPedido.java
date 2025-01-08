@@ -34,6 +34,9 @@ public class LineaPedido {
         this.producto = producto;
     }
 
+    public LineaPedido() {
+    }
+
     public int getCantidad() {
         return cantidad;
     }
