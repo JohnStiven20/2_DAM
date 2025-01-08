@@ -16,7 +16,6 @@ import static app.Modelo.utils.DatabaseConfPizzeria.INSERT_CLIENTE;
 import static app.Modelo.utils.DatabaseConfPizzeria.PASS;
 import static app.Modelo.utils.DatabaseConfPizzeria.SELECT_CLIENTE;
 import static app.Modelo.utils.DatabaseConfPizzeria.SELECT_CLIENTE_ALL;
-import static app.Modelo.utils.DatabaseConfPizzeria.UPDATE_CLIENTE;
 import static app.Modelo.utils.DatabaseConfPizzeria.URL;
 import static app.Modelo.utils.DatabaseConfPizzeria.USER;
 
@@ -24,8 +23,8 @@ public class JdbcClienteDao implements ClienteDao {
 
     @Override
     public void delete(Cliente cliente) throws SQLException {
-        try (Connection connection = getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CLIENTE);) {
+        try (Connection connection = getConnection(); 
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CLIENTE);) {
             preparedStatement.setInt(1, cliente.getId());
             preparedStatement.execute();
         }
@@ -122,16 +121,16 @@ public class JdbcClienteDao implements ClienteDao {
     }
 
     @Override
-    public void update(Cliente cliente, String dirrecion, String telefono, String apellidos) throws SQLException {
+    public void update(Cliente cliente) throws SQLException {
 
-        try (Connection connection = getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CLIENTE);
-            preparedStatement.setString(1, dirrecion);
-            preparedStatement.setString(2, apellidos);
-            preparedStatement.setString(3, telefono);
-            preparedStatement.setInt(4, cliente.getId());
-            preparedStatement.execute();
+        // try (Connection connection = getConnection()) {
+        //     PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CLIENTE);
+        //     preparedStatement.setString(1, dirrecion);
+        //     preparedStatement.setString(2, apellidos);
+        //     preparedStatement.setString(3, telefono);
+        //     preparedStatement.setInt(4, cliente.getId());
+        //     preparedStatement.execute();
 
-        }
+        // }
     }
 }

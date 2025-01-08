@@ -19,26 +19,48 @@ public class JpaClienteDao implements ClienteDao {
 
     @Override
     public void delete(Cliente cliente) throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        try(EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            entityManager.getTransaction().begin();
+            entityManager.remove(cliente);
+            entityManager.getTransaction().commit();
+            entityManager.close();
+        } 
     }
 
     @Override
-    public void update(Cliente cliente, String dirrecion, String telefono, String apellidos) throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public void update(Cliente cliente) throws SQLException {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()){
+            entityManager.getTransaction().begin();
+            entityManager.merge(cliente);
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+        } 
     }
 
     @Override
-    public Cliente getClienteByEmail(String gmail) throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getClienteByEmail'");
+    public Cliente getClienteByEmail(String email) throws SQLException {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            entityManager.getTransaction().begin();
+            Cliente cliente = entityManager
+            .createQuery("SELECT c FROM cliente c WHERE c.email = :email", Cliente.class)
+            .setParameter("email", email)
+            .getSingleResult();
+            entityManager.close();
+            return  cliente;
+        } 
     }
 
     @Override
     public List<Cliente> getAllCustomers() throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllCustomers'");
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            entityManager.getTransaction().begin();
+            List<Cliente> listaCliente = entityManager
+            .createQuery("SELECT c FROM cliente c", Cliente.class)
+            .getResultList();
+            entityManager.close();
+            return listaCliente;
+        }
     }
 
 
@@ -48,11 +70,10 @@ public class JpaClienteDao implements ClienteDao {
             entityManager.getTransaction().begin();
             entityManager.persist(cliente);
             entityManager.getTransaction().commit();
+            entityManager.close();
         }
 
         return  true;
     }
-
-
 
 }

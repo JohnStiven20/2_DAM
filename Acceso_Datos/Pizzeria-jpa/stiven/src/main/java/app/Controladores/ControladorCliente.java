@@ -4,19 +4,16 @@ import java.sql.SQLException;
 import java.util.List;
 
 import app.Controladores.dao.ClienteDao;
-import app.Controladores.dao.impl.JdbcClienteDao;
+import app.Controladores.dao.impl.JpaClienteDao;
 import app.Modelo.Cliente;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 public class ControladorCliente {
 
     ClienteDao clienteDao;
-    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default"); 
     
-
     public  ControladorCliente() {
-        clienteDao = new JdbcClienteDao();
+        clienteDao = new JpaClienteDao();
+        
     }
 
     public boolean  save(Cliente cliente) throws SQLException {
@@ -36,7 +33,10 @@ public class ControladorCliente {
     }
 
     public void update(Cliente cliente, String direccion, String telefono, String apellidos) throws SQLException {
-        clienteDao.update(cliente, direccion, telefono, apellidos);
+        cliente.setApellidos(apellidos);
+        cliente.setDireccion(direccion);
+        cliente.setTelefono(telefono);
+        clienteDao.update(cliente);
     }
 
     public void registerCustomer(String dni, String nombre, String telefono, String email,String direccion , String password, Boolean admin, String apellidos) throws SQLException {

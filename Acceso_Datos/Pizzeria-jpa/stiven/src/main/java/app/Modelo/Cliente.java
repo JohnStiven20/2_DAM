@@ -3,13 +3,12 @@ package app.Modelo;
 import java.util.List;
 
 import app.Interfaces.Pagable;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 
 
 @Entity
@@ -18,7 +17,7 @@ public class Cliente implements  Pagable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
-    @Column(name="dni_", unique=true, nullable=false)
+    @Column(name="dni", unique=true, nullable=false)
     private String  dni;
     private String nombre;
     @Column(unique=true, nullable=false)
@@ -30,7 +29,8 @@ public class Cliente implements  Pagable {
     private String direccion;
     private String apellidos;
     
-    @OneToMany(mappedBy="cliente", cascade=CascadeType.ALL, orphanRemoval=true) 
+    // @OneToMany(mappedBy="cliente", cascade=CascadeType.ALL, orphanRemoval=true) 
+    @Transient
     private List<Pedido> listaPedidos;
 
     public Cliente(String dni, String nombre, String telefono, String email,String direccion , String password, List<Pedido> listaPedidos, Boolean admin, String apellidos) {

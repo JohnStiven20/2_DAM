@@ -9,7 +9,7 @@ public interface ClienteDao {
 
     void delete(Cliente cliente) throws SQLException;
 
-    void update(Cliente cliente, String dirrecion, String telefono, String apellidos) throws SQLException;
+    void update(Cliente cliente) throws SQLException;
 
     boolean save(Cliente cliente) throws SQLException;
 

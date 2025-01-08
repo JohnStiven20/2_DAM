@@ -6,12 +6,9 @@ import java.util.List;
 import app.Interfaces.Pagable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
@@ -35,8 +32,9 @@ public class Pedido {
     private List<LineaPedido> lineaPedidos;
     
     
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "cliente_id", nullable = false)
+    // @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // @JoinColumn(name = "cliente_id", nullable = false)
+    @Transient
     private Cliente cliente;
     @Transient
     private Pagable pagable;
