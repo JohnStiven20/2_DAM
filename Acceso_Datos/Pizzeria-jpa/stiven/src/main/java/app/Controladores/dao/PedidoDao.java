@@ -3,7 +3,6 @@ package app.Controladores.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import app.Interfaces.Pagable;
 import app.Modelo.Cliente;
 import app.Modelo.LineaPedido;
 import app.Modelo.Pedido;
@@ -14,9 +13,9 @@ public interface PedidoDao {
 
     void save(Pedido pedido) throws SQLException ;
 
-    boolean delete(Pedido pedido) throws SQLException;
+    void  delete(Pedido pedido) throws SQLException;
 
-    void update(Pedido pedido, EstadoPedido estadoPedido) throws SQLException;
+    void update(Pedido pedido) throws SQLException;
 
     List<Pedido> getOrdersByCustumer(Cliente cliente) throws SQLException;
 

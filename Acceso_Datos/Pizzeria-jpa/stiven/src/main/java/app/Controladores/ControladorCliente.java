@@ -13,7 +13,6 @@ public class ControladorCliente {
     
     public  ControladorCliente() {
         clienteDao = new JpaClienteDao();
-        
     }
 
     public boolean  save(Cliente cliente) throws SQLException {
@@ -32,16 +31,8 @@ public class ControladorCliente {
         return clienteDao.getAllCustomers();
     }
 
-    public void update(Cliente cliente, String direccion, String telefono, String apellidos) throws SQLException {
-        cliente.setApellidos(apellidos);
-        cliente.setDireccion(direccion);
-        cliente.setTelefono(telefono);
+    public void update(Cliente cliente) throws SQLException {
         clienteDao.update(cliente);
-    }
-
-    public void registerCustomer(String dni, String nombre, String telefono, String email,String direccion , String password, Boolean admin, String apellidos) throws SQLException {
-        Cliente cliente = new Cliente(dni, nombre, telefono, email, direccion, password, null, admin, apellidos);
-        clienteDao.save(cliente);
     }
 
     public Cliente loginCustomer(String gmail) throws SQLException {

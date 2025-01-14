@@ -2,31 +2,27 @@ package app.Modelo;
 
 import java.util.List;
 
+import app.Enums.Size;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+@Entity
+@DiscriminatorValue(value="Pasta")
 public class Pasta extends Producto{
 
-    private List<Ingrediente> ingredientes;
-
-    public Pasta(String nombre, double precio, List<Ingrediente> listaIngredientes) {
-        super(nombre, precio);
-        this.ingredientes = listaIngredientes;
+    public Pasta() {
     }
 
-    public Pasta(int id, List<Ingrediente> ingredientes, String nombre, double precio) {
-        super(id, nombre, precio);
-        this.ingredientes = ingredientes;
+    public Pasta(int id, String nombre, double precio, Size size, List<Ingrediente> productos) {
+        super(id, nombre, precio, size, productos);
     }
 
-    public List<Ingrediente> getIngredientes() {
-        return ingredientes;
-    }
-
-    public void setIngredientes(List<Ingrediente> ingredientes) {
-        this.ingredientes = ingredientes;
+    public Pasta(String nombre, double precio, Size size, List<Ingrediente> productos) {
+        super(nombre, precio, size, productos);
     }
 
     @Override
     public String toString() {
-        return super.toString() + " Pasta [ingredientes=" + ingredientes + "]";
+        return super.toString();
     }
 
 }

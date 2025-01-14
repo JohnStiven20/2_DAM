@@ -1,0 +1,11 @@
+"filename", "language", "Java", "comment", "blank", "total"
+"c:\Users\criss\Curso2DAM\AcceseDatos\Practica_0_Pizza\Acceso_datos\Practica_0_Pizzeria\demo\src\main\java\pizzeria\Controller\dao\impl\JdbcClienteDAO.java", "Java", 0, 0, -3, -3
+"c:\Users\criss\Curso2DAM\AcceseDatos\Practica_0_Pizza\Acceso_datos\Practica_0_Pizzeria\demo\src\main\java\pizzeria\Controller\dao\impl\JdbcPedidoDAO.java", "Java", 0, 0, -14, -14
+"c:\Users\criss\Curso2DAM\AcceseDatos\Practica_0_Pizza\Acceso_datos\Practica_0_Pizzeria\demo\src\main\java\pizzeria\Controller\dao\impl\JdbcProductoDAO.java", "Java", -49, 0, -14, -63
+"c:\Users\criss\Curso2DAM\AcceseDatos\Practica_0_Pizza\Acceso_datos\Practica_0_Pizzeria\demo\src\main\java\pizzeria\mainPizzeria.java", "Java", 4, 0, 2, 6
+"c:\Users\criss\Curso2DAM\AcceseDatos\Practica_0_Pizza\Acceso_datos\Practica_0_Pizzeria\demo\src\test\java\pizzeria\controller\ControladorClienteTest.java", "Java", 0, 0, -3, -3
+"c:\Users\criss\Curso2DAM\AcceseDatos\Practica_0_Pizza\Acceso_datos\Practica_0_Pizzeria\demo\src\test\java\pizzeria\controller\dao\impl\JdbcProductoDAOTest.java", "Java", -6, 6, 0, 0
+"c:\Users\criss\Curso2DAM\AcceseDatos\Practica_0_Pizza\Acceso_datos\Practica_0_Pizzeria\demo\target\classes\pizzeria\Controller\dao\impl\JdbcProductoDAO.class", "Java", -55, 0, -5, -60
+"c:\Users\criss\Curso2DAM\AcceseDatos\Practica_0_Pizza\Acceso_datos\Practica_0_Pizzeria\demo\target\classes\pizzeria\mainPizzeria.class", "Java", -3, 0, 0, -3
+"c:\Users\criss\Curso2DAM\AcceseDatos\Practica_0_Pizza\Acceso_datos\Practica_0_Pizzeria\demo\target\test-classes\pizzeria\controller\dao\impl\JdbcProductoDAOTest.class", "Java", -4, 0, 0, -4
+"Total", "-", -113, 6, -37, -144

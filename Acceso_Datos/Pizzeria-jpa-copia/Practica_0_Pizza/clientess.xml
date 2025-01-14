@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<clientes>
+    <cliente id="1">
+        <admin>true</admin>
+        <direccion>C/Mayor 10</direccion>
+        <dni>11102496E</dni>
+        <email>j.uribemontoya@edu.gva.es</email>
+        <nombre>Javier Uribe</nombre>
+        <password>password123</password>
+        <telefono>+34111929992</telefono>
+    </cliente>
+    <cliente id="2">
+        <admin>true</admin>
+        <direccion>C/Sol 20</direccion>
+        <dni>12345678Z</dni>
+        <email>ana.gomez@example.com</email>
+        <nombre>Ana Gómez</nombre>
+        <password>password456</password>
+        <telefono>+34678901234</telefono>
+    </cliente>
+    <cliente id="3">
+        <admin>false</admin>
+        <direccion>C/ Luna 5</direccion>
+        <dni>87654321X</dni>
+        <email>carlos.perez@example.com</email>
+        <nombre>Carlos Pérez</nombre>
+        <password>password789</password>
+        <telefono>+34612345678</telefono>
+    </cliente>
+</clientes>

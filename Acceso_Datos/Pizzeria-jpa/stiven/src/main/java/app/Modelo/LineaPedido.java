@@ -8,7 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class LineaPedido {
@@ -17,11 +17,12 @@ public class LineaPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int cantidad;
-    @Transient
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Producto producto;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "pedido_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "pedido_id", nullable = true)
     private Pedido pedido;
+
 
     public LineaPedido(int id, int cantidad, Producto producto) {
         this.cantidad = cantidad;
@@ -32,6 +33,13 @@ public class LineaPedido {
     public LineaPedido(int cantidad, Producto producto) {
         this.cantidad = cantidad;
         this.producto = producto;
+    }
+
+    public LineaPedido() {
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
     public int getCantidad() {

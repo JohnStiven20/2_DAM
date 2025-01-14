@@ -3,12 +3,13 @@ package app.Modelo;
 import java.util.List;
 
 import app.Interfaces.Pagable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -29,8 +30,7 @@ public class Cliente implements  Pagable {
     private String direccion;
     private String apellidos;
     
-    // @OneToMany(mappedBy="cliente", cascade=CascadeType.ALL, orphanRemoval=true) 
-    @Transient
+    @OneToMany(mappedBy="cliente", cascade=CascadeType.ALL, orphanRemoval=true) 
     private List<Pedido> listaPedidos;
 
     public Cliente(String dni, String nombre, String telefono, String email,String direccion , String password, List<Pedido> listaPedidos, Boolean admin, String apellidos) {
@@ -147,8 +147,6 @@ public class Cliente implements  Pagable {
         return direccion;
     }
 
-
-
     public String getApellidos() {
         return apellidos;
     }
@@ -168,7 +166,5 @@ public class Cliente implements  Pagable {
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
     }
-
-    
 
 }
