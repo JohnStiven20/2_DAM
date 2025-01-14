@@ -21,47 +21,59 @@ public class JpaProducto implements ProductoDao {
 
     @Override
     public void delete(Producto producto) throws SQLException {
-
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            Producto managedCliente = entityManager.contains(producto) ? producto : entityManager.merge(producto);
-            entityManager.remove(managedCliente);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try (entityManager) {
+            entityManager.getTransaction().begin();
+            Producto managedProducto = entityManager.contains(producto) ? producto : entityManager.merge(producto);
+            entityManager.remove(managedProducto);
             entityManager.getTransaction().commit();
-            entityManager.close();
+        } catch (Exception e) {
+            if (entityManager != null && entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new SQLException("Error al eliminar el producto: " + e.getMessage(), e);
         }
-
     }
 
     @Override
     public void update(Producto producto) throws SQLException {
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try (entityManager) {
             entityManager.getTransaction().begin();
             entityManager.merge(producto);
             entityManager.getTransaction().commit();
-            entityManager.close();
+        } catch (Exception e) {
+            if (entityManager != null && entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new SQLException("Error al actualizar el producto: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public void  save(Producto producto) throws SQLException {
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+    public void save(Producto producto) throws SQLException {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try (entityManager) {
             entityManager.getTransaction().begin();
             entityManager.persist(producto);
             entityManager.getTransaction().commit();
-            entityManager.close();
+        } catch (Exception e) {
+            if (entityManager != null && entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new SQLException("Error al guardar el producto: " + e.getMessage(), e);
         }
-
     }
 
     @Override
     public List<Producto> getAllProducts() throws SQLException {
-
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            entityManager.getTransaction().begin();
-            List<Producto> listaCliente = entityManager
+            List<Producto> listaProductos = entityManager
                     .createQuery("SELECT c FROM Producto c", Producto.class)
                     .getResultList();
-            entityManager.close();
-            return listaCliente;
+            return listaProductos;
+        } catch (Exception e) {
+            throw new SQLException("Error al obtener todos los productos: " + e.getMessage(), e);
         }
     }
 
@@ -74,41 +86,35 @@ public class JpaProducto implements ProductoDao {
                 "WHERE p.id = :id";
 
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            entityManager.getTransaction().begin();
-
+            
             @SuppressWarnings("unchecked")
             List<Ingrediente> ingredientes = entityManager
-                    .createNativeQuery(CONSULTA, Ingrediente.class) 
-                    .setParameter("id", producto.getId()) 
+                    .createNativeQuery(CONSULTA, Ingrediente.class)
+                    .setParameter("id", producto.getId())
                     .getResultList();
-
-            entityManager.getTransaction().commit();
-            entityManager.close();
             return ingredientes;
+        } catch (Exception e) {
+            throw new SQLException("Error al encontrar ingredientes por producto: " + e.getMessage(), e);
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<Alergeno> findbyIngrediente(Ingrediente ingrediente) throws SQLException {
-
-        String CONSULTA = "SELECT alergeno.*\n" + //
-                        "FROM alergeno\n" + //
-                        "JOIN ingrediente_alergeno ON ingrediente_alergeno.alergenos_id = alergeno.id\n" + //
-                        "JOIN ingrediente ON ingrediente_alergeno.ingredientes_id = ingrediente.id\n" + //
+        String CONSULTA = "SELECT alergeno.* " +
+                        "FROM alergeno " +
+                        "JOIN ingrediente_alergeno ON ingrediente_alergeno.alergenos_id = alergeno.id " +
+                        "JOIN ingrediente ON ingrediente_alergeno.ingredientes_id = ingrediente.id " +
                         "WHERE ingrediente.id = :id";
 
-
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            entityManager.getTransaction().begin();
-            entityManager.getTransaction().commit();
-            List<Alergeno> listaAlergenos = entityManager.createNativeQuery(CONSULTA, Alergeno.class).setParameter("id", ingrediente.getId())
-            .getResultList();
-            entityManager.close();
+            List<Alergeno> listaAlergenos = entityManager
+                    .createNativeQuery(CONSULTA, Alergeno.class)
+                    .setParameter("id", ingrediente.getId())
+                    .getResultList();
             return listaAlergenos;
-            
+        } catch (Exception e) {
+            throw new SQLException("Error al encontrar alérgenos por ingrediente: " + e.getMessage(), e);
         }
-
     }
-
 }

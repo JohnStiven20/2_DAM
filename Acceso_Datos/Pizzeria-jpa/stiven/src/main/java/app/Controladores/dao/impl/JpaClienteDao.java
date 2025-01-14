@@ -13,31 +13,39 @@ public class JpaClienteDao implements ClienteDao {
 
     private final EntityManagerFactory entityManagerFactory;
 
-    
-
     public JpaClienteDao() {
         this.entityManagerFactory = Persistence.createEntityManagerFactory("default");
     }
 
     @Override
     public void delete(Cliente cliente) throws SQLException {
-        try(EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try (entityManager) {
             entityManager.getTransaction().begin();
             Cliente managedCliente = entityManager.contains(cliente) ? cliente : entityManager.merge(cliente);
             entityManager.remove(managedCliente);
             entityManager.getTransaction().commit();
-            entityManager.close();
-        } 
+        } catch (Exception e) {
+            if (entityManager != null && entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new SQLException("Error al eliminar el cliente: " + e.getMessage() + ". Cliente: " + cliente, e);
+        }
     }
 
     @Override
     public void update(Cliente cliente) throws SQLException {
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try (entityManager) {
             entityManager.getTransaction().begin();
             entityManager.merge(cliente);
             entityManager.getTransaction().commit();
-            entityManager.close();
-        } 
+        } catch (Exception e) {
+            if (entityManager != null && entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new SQLException("Error al actualizar el cliente: " + e.getMessage() + ". Cliente: " + cliente, e);
+        }
     }
 
     @Override
@@ -45,12 +53,13 @@ public class JpaClienteDao implements ClienteDao {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             Cliente cliente = entityManager
-            .createQuery("SELECT c FROM Cliente c WHERE c.email = :email", Cliente.class)
-            .setParameter("email", email)
-            .getSingleResult();
-            entityManager.close();
-            return  cliente;
-        } 
+                .createQuery("SELECT c FROM Cliente c WHERE c.email = :email", Cliente.class)
+                .setParameter("email", email)
+                .getSingleResult();
+            return cliente;
+        } catch (Exception e) {
+            throw new SQLException("Error al obtener el cliente por email: " + e.getMessage() + ". Email: " + email, e);
+        }
     }
 
     @Override
@@ -58,24 +67,27 @@ public class JpaClienteDao implements ClienteDao {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             List<Cliente> listaCliente = entityManager
-            .createQuery("SELECT c FROM Cliente c", Cliente.class)
-            .getResultList();
-            entityManager.close();
+                .createQuery("SELECT c FROM Cliente c", Cliente.class)
+                .getResultList();
             return listaCliente;
+        } catch (Exception e) {
+            throw new SQLException("Error al obtener todos los clientes: " + e.getMessage(), e);
         }
     }
-
 
     @Override
     public boolean save(Cliente cliente) throws SQLException {
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try (entityManager) {
             entityManager.getTransaction().begin();
             entityManager.merge(cliente);
             entityManager.getTransaction().commit();
-            entityManager.close();
+            return true;
+        } catch (Exception e) {
+            if (entityManager != null && entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new SQLException("Error al guardar el cliente: " + e.getMessage() + ". Cliente: " + cliente, e);
         }
-        
-        return  true;
     }
-
 }
