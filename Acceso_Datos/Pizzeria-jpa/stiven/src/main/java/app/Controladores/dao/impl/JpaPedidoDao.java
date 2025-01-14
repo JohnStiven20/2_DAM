@@ -110,8 +110,14 @@ public class JpaPedidoDao implements PedidoDao {
 
     @Override
     public void addOrderLine(int cantidad, Producto producto, Pedido pedido) throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addOrderLine'");
+       
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            entityManager.getTransaction().begin();
+            
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
     }
     
 

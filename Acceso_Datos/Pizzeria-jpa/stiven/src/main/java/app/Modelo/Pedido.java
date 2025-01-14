@@ -34,7 +34,7 @@ public class Pedido {
     private Date fecha;
     @Enumerated(EnumType.STRING)
     private EstadoPedido estado;
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pedido", cascade = {CascadeType.ALL, CascadeType.PERSIST, CascadeType.REFRESH}, orphanRemoval = true)
     private List<LineaPedido> lineaPedidos;
     
     
@@ -46,6 +46,8 @@ public class Pedido {
 
     public Pedido() {
     }
+
+
    
     public Pedido(int id,EstadoPedido estado, List<LineaPedido> lineaPedidos, Cliente cliente, Pagable pagable) {
         this.id = id;
@@ -68,6 +70,8 @@ public class Pedido {
     public void setPagable(Pagable pagable) {
         this.pagable = pagable;
     }
+
+
 
     public Cliente getCliente() {
         return cliente;
@@ -124,6 +128,8 @@ public class Pedido {
         sb.append('}');
         return sb.toString();
     }
+
+
 
 
 }

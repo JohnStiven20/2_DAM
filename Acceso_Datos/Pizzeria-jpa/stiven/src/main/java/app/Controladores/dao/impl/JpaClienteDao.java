@@ -13,6 +13,8 @@ public class JpaClienteDao implements ClienteDao {
 
     private final EntityManagerFactory entityManagerFactory;
 
+    
+
     public JpaClienteDao() {
         this.entityManagerFactory = Persistence.createEntityManagerFactory("default");
     }
@@ -68,11 +70,11 @@ public class JpaClienteDao implements ClienteDao {
     public boolean save(Cliente cliente) throws SQLException {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
-            entityManager.persist(cliente);
+            entityManager.merge(cliente);
             entityManager.getTransaction().commit();
             entityManager.close();
         }
-
+        
         return  true;
     }
 
