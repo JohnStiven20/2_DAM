@@ -113,11 +113,9 @@ public class JpaPedidoDao implements PedidoDao {
        
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
+            LineaPedido lineaPedido = new LineaPedido(cantidad, producto, pedido);
             
-            
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
+        } 
     }
     
 

@@ -22,13 +22,12 @@ public class MainPrueba {
 
     public static void main(String[] args) {
 
-        EntityManagerFactory entityManagerFactory
-                = Persistence.createEntityManagerFactory("default");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        var entityTransaction = entityManager.getTransaction();
-        entityTransaction.begin();
-        entityTransaction.commit();
-        entityManager.close();
+        EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("default");
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            var entityTransaction = entityManager.getTransaction();
+            entityTransaction.begin();
+            entityTransaction.commit();
+        }
 
         ControladorCliente controladorCliente = new ControladorCliente();
 
@@ -48,7 +47,9 @@ public class MainPrueba {
         Alergeno alergeno1 = new Alergeno(ingredientes, "Papitas");
         alergenos.add(alergeno1);
         alergenos.add(alergeno);
+
         Ingrediente ingrediente = new Ingrediente("Cebolla", alergenos);
+
         ingredientes.add(ingrediente);
         Producto producto = new Pizza("Pasta", 41, Size.GRANDE, ingredientes);
         Pedido pedido = new Pedido(EstadoPedido.ENTREGADO, lineasPedidos, cliente, null);
@@ -61,13 +62,17 @@ public class MainPrueba {
 
         List<LineaPedido> lineasPedidosClonadas = new ArrayList<>();
 
+        lineaPedido.getProducto().getIngredientes().add(ingrediente);
+
         for (LineaPedido linea : pedido.getLineaPedidos()) {
+
             LineaPedido lineaClonada = new LineaPedido();
             lineaClonada.setCantidad(linea.getCantidad());
             lineaClonada.setProducto(linea.getProducto());
             lineaClonada.setPedido(pedidoClonado); // Asociar al pedido clonado
             lineasPedidosClonadas.add(lineaClonada);
         }
+
         pedidoClonado.setLineaPedidos(lineasPedidosClonadas);
         pedidoClonado.setCliente(cliente1);
         pedidos2.add(pedidoClonado);

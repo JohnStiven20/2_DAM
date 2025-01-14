@@ -109,10 +109,19 @@ public class Producto {
         this.size = size;
     }
 
+    
     @Override
     public String toString() {
         return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", size=" + size + ", productos="
                 + ingredientes + "]";
+    }
+
+    public List<Ingrediente> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<Ingrediente> ingredientes) {
+        this.ingredientes = ingredientes;
     }
 
     // @Override
