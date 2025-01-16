@@ -50,12 +50,19 @@ public class MainEnganche {
         Pasta pasta = new Pasta("Pasta", 15, Size.GRANDE, ingredientes);
         Pizza pizza = new Pizza("Pizza", 0, Size.MEDIANO, ingredientes);
 
+        List<Ingrediente> ingredientesNuevos = new ArrayList<>();
+
+        // ingredientes.add(new Ingrediente("Maria", null));
+        // ingredientes.add(new Ingrediente("Perez", null));
+
+        //Pizza pizza1 = new Pizza("Pizza", 4, Size.GRANDE, ingredientesNuevos);
+
 
         try {
 
             jpaProducto.save(pasta);
             jpaProducto.save(pizza);
-            jpaProducto.save(pasta);
+            //jpaProducto.save(pizza1);
 
         } catch (NoResultException | SQLException e) {
             System.out.println(e.getMessage());

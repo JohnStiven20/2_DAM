@@ -6,6 +6,7 @@ import java.util.List;
 
 import app.Controladores.dao.ProductoDao;
 import app.Modelo.Alergeno;
+import app.Modelo.Bebida;
 import app.Modelo.Ingrediente;
 import app.Modelo.Producto;
 import jakarta.persistence.EntityManager;
@@ -53,112 +54,105 @@ public class JpaProducto implements ProductoDao {
     }
 
     @Override
-public void save(Producto producto) throws SQLException {
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-    try {
-        entityManager.getTransaction().begin();
-
-        // Verificar si el producto ya existe
-        Producto productoBaseDatos = null;
+    public void save(Producto producto) throws SQLException {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            productoBaseDatos = entityManager.createQuery("SELECT c FROM Producto c WHERE c.nombre = :nombre", Producto.class)
-                                             .setParameter("nombre", producto.getNombre())
-                                             .getSingleResult();
-        } catch (NoResultException e) {
-            // Producto no existe, continuamos con la creación
-        }
+            entityManager.getTransaction().begin();
 
-        if (productoBaseDatos != null) {
-            // Actualizamos el producto existente
-            productoBaseDatos.setIngredientes(producto.getIngredientes());
-            entityManager.merge(productoBaseDatos);
-        } else {
-            // Persistimos un nuevo producto
-            if (producto.getIngredientes() != null) {
-                List<Ingrediente> ingredientesConContexto = new ArrayList<>();
-                for (Ingrediente ingrediente : producto.getIngredientes()) {
-                    Ingrediente ingredienteConContexto = saveIngrediente(entityManager, ingrediente);
-                    ingredientesConContexto.add(ingredienteConContexto);
+            Producto productoBaseDatos = null;
+            try {
+                productoBaseDatos = entityManager
+                        .createQuery("SELECT c FROM Producto c WHERE c.nombre = :nombre", Producto.class)
+                        .setParameter("nombre", producto.getNombre())
+                        .getSingleResult();
+
+                // Actualizar el producto existente
+                
+            } catch (NoResultException e) {
+                // Persistir nuevo producto
+                if (producto instanceof Bebida) {
+                    entityManager.persist(producto);
+                } else {
+                    // Gestionar ingredientes
+                    if (producto.getIngredientes() != null) {
+
+                        ArrayList<Ingrediente> ingredientesBaseDatos = new ArrayList<>();
+
+                        for (Ingrediente ingrediente : producto.getIngredientes()) {
+                            Ingrediente ingredienteBaseDatos = saveIngrediente(entityManager, ingrediente);
+                            ingredientesBaseDatos.add(ingredienteBaseDatos);
+                        }
+
+                        producto.setIngredientes(ingredientesBaseDatos);
+
+                    }
+                    entityManager.persist(producto);
                 }
-                producto.setIngredientes(ingredientesConContexto);
             }
-            entityManager.persist(producto);
-        }
 
-        entityManager.getTransaction().commit();
-    } catch (Exception e) {
-        if (entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().rollback();
-        }
-        throw new SQLException("Error al guardar el producto: " + e.getMessage(), e);
-    } finally {
-        if (entityManager.isOpen()) {
-            entityManager.close();
-        }
-    }
-}
-
-    
-
-
-public Ingrediente saveIngrediente(EntityManager entityManager, Ingrediente ingrediente) throws SQLException {
-    if (ingrediente == null) {
-        throw new IllegalArgumentException("El ingrediente no puede ser null");
-    }
-
-    Ingrediente ingredienteBaseDatos = null;
-    try {
-        ingredienteBaseDatos = entityManager.createQuery("SELECT c FROM Ingrediente c WHERE c.nombre = :nombre", Ingrediente.class)
-                                            .setParameter("nombre", ingrediente.getNombre())
-                                            .getSingleResult();
-    } catch (NoResultException e) {
-        // Ingrediente no existe
-    }
-
-    if (ingredienteBaseDatos != null) {
-        return ingredienteBaseDatos; // Retornar ingrediente existente
-    } else {
-        // Persistir nuevo ingrediente con sus alérgenos
-        if (ingrediente.getAlergenos() != null) {
-            List<Alergeno> alergenosConContexto = new ArrayList<>();
-            for (Alergeno alergeno : ingrediente.getAlergenos()) {
-                Alergeno alergenoConContexto = saveAlergeno(entityManager, alergeno);
-                alergenosConContexto.add(alergenoConContexto);
+            entityManager.getTransaction().commit();
+        } catch (SQLException e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
             }
-            ingrediente.setAlergenos(alergenosConContexto);
+            throw new SQLException("Error al guardar el producto: " + e.getMessage(), e);
+        } finally {
+            if (entityManager.isOpen()) {
+                entityManager.close();
+            }
         }
-        entityManager.persist(ingrediente);
-        return ingrediente;
-    }
-}
-
-
-
-
-
-public Alergeno saveAlergeno(EntityManager entityManager, Alergeno alergeno) throws SQLException {
-    if (alergeno == null) {
-        throw new IllegalArgumentException("El alérgeno no puede ser null");
     }
 
-    Alergeno alergenoBaseDatos = null;
-    try {
-        alergenoBaseDatos = entityManager.createQuery("SELECT c FROM Alergeno c WHERE c.nombre = :nombre", Alergeno.class)
-                                         .setParameter("nombre", alergeno.getNombre())
-                                         .getSingleResult();
-    } catch (NoResultException e) {
-        // Alérgeno no existe
+    public Ingrediente saveIngrediente(EntityManager entityManager, Ingrediente ingrediente) throws SQLException {
+        if (ingrediente == null) {
+            throw new IllegalArgumentException("El ingrediente no puede ser null");
+        }
+
+        try {
+            // Verificar si el ingrediente ya existe
+            Ingrediente ingredienteBaseDatos = entityManager
+                    .createQuery("SELECT c FROM Ingrediente c WHERE c.nombre = :nombre", Ingrediente.class)
+                    .setParameter("nombre", ingrediente.getNombre())
+                    .getSingleResult();
+
+            // Actualizar o devolver ingrediente existente
+            return entityManager.merge(ingredienteBaseDatos);
+        } catch (NoResultException e) {
+            // Gestionar alérgenos y persistir nuevo ingrediente
+
+            if (ingrediente.getAlergenos() != null) {
+                ArrayList<Alergeno> alergenosBaseDatos = new ArrayList<>();
+
+                for (Alergeno alergeno : ingrediente.getAlergenos()) {
+                    alergenosBaseDatos.add(saveAlergeno(entityManager, alergeno));
+                }
+
+                ingrediente.setAlergenos(alergenosBaseDatos);
+
+            }
+            return entityManager.merge(ingrediente); // Usar merge para asociarlo al contexto
+        }
     }
 
-    if (alergenoBaseDatos != null) {
-        return alergenoBaseDatos; // Retornar alérgeno existente
-    } else {
-        entityManager.persist(alergeno);
-        return alergeno;
+    public Alergeno saveAlergeno(EntityManager entityManager, Alergeno alergeno) throws SQLException {
+        if (alergeno == null) {
+            throw new IllegalArgumentException("El alérgeno no puede ser null");
+        }
+
+        try {
+            // Verificar si el alérgeno ya existe
+            Alergeno alergenoBaseDatos = entityManager
+                    .createQuery("SELECT c FROM Alergeno c WHERE c.nombre = :nombre", Alergeno.class)
+                    .setParameter("nombre", alergeno.getNombre())
+                    .getSingleResult();
+
+            // Actualizar o devolver alérgeno existente
+            return entityManager.merge(alergenoBaseDatos);
+        } catch (NoResultException e) {
+            // Persistir nuevo alérgeno
+            return entityManager.merge(alergeno);
+        }
     }
-}
-
-
 
     @Override
     public List<Producto> getAllProducts() throws SQLException {
@@ -213,7 +207,4 @@ public Alergeno saveAlergeno(EntityManager entityManager, Alergeno alergeno) thr
         }
     }
 
-    
-
-   
 }
