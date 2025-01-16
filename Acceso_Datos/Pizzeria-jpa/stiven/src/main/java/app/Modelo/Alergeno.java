@@ -19,14 +19,12 @@ public class Alergeno {
     @ManyToMany(mappedBy="alergenos")
     private List<Ingrediente> ingredientes;
 
-    public Alergeno(int id, String nombre, List<Ingrediente> ingredientes) {
+    public Alergeno(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.ingredientes = ingredientes;
     }
 
-    public Alergeno(List<Ingrediente> ingredientes, String nombre) {
-        this.ingredientes = ingredientes;
+    public Alergeno(String nombre) {
         this.nombre = nombre;
     }
 

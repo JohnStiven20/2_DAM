@@ -6,6 +6,7 @@ import java.util.List;
 import app.Modelo.Alergeno;
 import app.Modelo.Ingrediente;
 import app.Modelo.Producto;
+import jakarta.persistence.NoResultException;
 
 public interface ProductoDao {
 
@@ -13,7 +14,7 @@ public interface ProductoDao {
 
     void update(Producto producto) throws SQLException;
 
-    void  save(Producto producto) throws SQLException;
+    void  save(Producto producto) throws SQLException , NoResultException;
 
     List<Producto> getAllProducts() throws SQLException;
 

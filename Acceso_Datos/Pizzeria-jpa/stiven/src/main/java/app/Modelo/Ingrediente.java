@@ -27,10 +27,9 @@ public class Ingrediente {
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     private List<Alergeno> alergenos;
 
-    public Ingrediente(int id, String nombre, List<Producto> listaProductos, List<Alergeno> alergenos) {
+    public Ingrediente(int id, String nombre, List<Alergeno> alergenos) {
         this.id = id;
         this.nombre = nombre;
-        this.listaProductos = listaProductos;
         this.alergenos = alergenos;
     }
 
@@ -39,17 +38,6 @@ public class Ingrediente {
         this.alergenos = alergenos;
     }
 
-    public Ingrediente(String nombre, List<Producto> listaProductos, List<Alergeno> alergenos) {
-        this.nombre = nombre;
-        this.listaProductos = listaProductos;
-        this.alergenos = alergenos;
-    }
-
-    public Ingrediente(int id, String nombre, List<Alergeno> alergenos) {
-        this.id = id;
-        this.nombre = nombre;
-        this.alergenos = alergenos;
-    }
 
     public Ingrediente() {
     }
