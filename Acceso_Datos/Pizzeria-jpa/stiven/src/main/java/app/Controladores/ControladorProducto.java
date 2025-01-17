@@ -21,16 +21,13 @@ public class ControladorProducto {
         productoDao2.save(producto);
     }
 
-    public void  delete(Producto producto) throws SQLException {
-        productoDao2.delete(producto);
+    public boolean  delete(Producto producto) throws SQLException {
+        return productoDao2.delete(producto);
     }
 
-    /**
-     *
-     * ESTE SITIO PATA EL UPDATE
-     * @throws SQLException
-     *
-     */
+    public void   update(Producto producto) throws SQLException {
+        productoDao2.update(producto);
+    }
 
     public List<Producto> getAllProducts() throws SQLException {
         return productoDao2.getAllProducts();

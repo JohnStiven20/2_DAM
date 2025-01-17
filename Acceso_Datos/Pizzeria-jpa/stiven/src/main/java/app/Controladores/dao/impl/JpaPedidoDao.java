@@ -16,10 +16,14 @@ import jakarta.persistence.Persistence;
 
 public class JpaPedidoDao implements PedidoDao {
 
-    private final EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
 
     public JpaPedidoDao() {
-        this.entityManagerFactory = Persistence.createEntityManagerFactory("default");
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            var entityTransaction = entityManager.getTransaction();
+            entityTransaction.begin();
+            entityTransaction.commit();
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.Controladores.ControladorProducto;
 import app.Controladores.dao.impl.JpaProducto;
 import app.Enums.Size;
 import app.Modelo.Alergeno;
@@ -25,6 +26,8 @@ public class MainEnganche {
             entityTransaction.begin();
             entityTransaction.commit();
         }
+
+        ControladorProducto controladorProducto = new ControladorProducto();
 
         JpaProducto jpaProducto = new JpaProducto();
 
@@ -50,7 +53,7 @@ public class MainEnganche {
         Pasta pasta = new Pasta("Pasta", 15, Size.GRANDE, ingredientes);
         Pizza pizza = new Pizza("Pizza", 0, Size.MEDIANO, ingredientes);
 
-        List<Ingrediente> ingredientesNuevos = new ArrayList<>();
+   
 
         // ingredientes.add(new Ingrediente("Maria", null));
         // ingredientes.add(new Ingrediente("Perez", null));
@@ -67,6 +70,19 @@ public class MainEnganche {
         } catch (NoResultException | SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        Ingrediente ingrediente = new Ingrediente(1, null, null);
+        List<Alergeno> alergenosNuevos = null;
+
+        try {
+            alergenos = controladorProducto.getAlergenosByIngredient(ingrediente);
+             System.out.println("BUENAS TARDES ");
+            alergenos.forEach(x -> System.out.println(x + "viva españa"));
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
 
     
     }

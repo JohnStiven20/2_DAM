@@ -20,21 +20,32 @@ public class JpaProducto implements ProductoDao {
 
     public JpaProducto() {
         this.entityManagerFactory = Persistence.createEntityManagerFactory("default");
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            var entityTransaction = entityManager.getTransaction();
+            entityTransaction.begin();
+            entityTransaction.commit();
+        }
     }
 
     @Override
-    public void delete(Producto producto) throws SQLException {
+    public boolean delete(Producto producto) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try (entityManager) {
+        try {
             entityManager.getTransaction().begin();
             Producto managedProducto = entityManager.contains(producto) ? producto : entityManager.merge(producto);
             entityManager.remove(managedProducto);
             entityManager.getTransaction().commit();
+            return true; // Eliminación exitosa
         } catch (Exception e) {
             if (entityManager != null && entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
-            throw new SQLException("Error al eliminar el producto: " + e.getMessage(), e);
+            System.err.println("Error al eliminar el producto: " + e.getMessage());
+            return false; // Error durante la eliminación
+        } finally {
+            if (entityManager.isOpen()) {
+                entityManager.close();
+            }
         }
     }
 
@@ -59,15 +70,13 @@ public class JpaProducto implements ProductoDao {
         try {
             entityManager.getTransaction().begin();
 
-            Producto productoBaseDatos = null;
             try {
-                productoBaseDatos = entityManager
+                entityManager
                         .createQuery("SELECT c FROM Producto c WHERE c.nombre = :nombre", Producto.class)
                         .setParameter("nombre", producto.getNombre())
                         .getSingleResult();
 
-                // Actualizar el producto existente
-                
+                // el producto existente no debe hacer nada
             } catch (NoResultException e) {
                 // Persistir nuevo producto
                 if (producto instanceof Bebida) {
@@ -168,40 +177,24 @@ public class JpaProducto implements ProductoDao {
 
     @Override
     public List<Ingrediente> findByProduct(Producto producto) throws SQLException {
-        String CONSULTA = "SELECT i.* "
-                + "FROM Ingrediente i "
-                + "JOIN producto_ingrediente pi ON i.id = pi.ingredientes_id "
-                + "JOIN producto p ON p.id = pi.listaProductos_id "
-                + "WHERE p.id = :id";
-
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-
-            @SuppressWarnings("unchecked")
-            List<Ingrediente> ingredientes = entityManager
-                    .createNativeQuery(CONSULTA, Ingrediente.class)
+            return entityManager.createQuery(
+                    "SELECT i FROM Ingrediente i JOIN i.listaProductos p WHERE p.id = :id", Ingrediente.class)
                     .setParameter("id", producto.getId())
                     .getResultList();
-            return ingredientes;
         } catch (Exception e) {
             throw new SQLException("Error al encontrar ingredientes por producto: " + e.getMessage(), e);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Alergeno> findbyIngrediente(Ingrediente ingrediente) throws SQLException {
-        String CONSULTA = "SELECT alergeno.* "
-                + "FROM alergeno "
-                + "JOIN ingrediente_alergeno ON ingrediente_alergeno.alergenos_id = alergeno.id "
-                + "JOIN ingrediente ON ingrediente_alergeno.ingredientes_id = ingrediente.id "
-                + "WHERE ingrediente.id = :id";
 
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            List<Alergeno> listaAlergenos = entityManager
-                    .createNativeQuery(CONSULTA, Alergeno.class)
+            return entityManager.createQuery(
+                    "SELECT a FROM Alergeno a JOIN a.ingredientes i WHERE i.id = :id", Alergeno.class)
                     .setParameter("id", ingrediente.getId())
                     .getResultList();
-            return listaAlergenos;
         } catch (Exception e) {
             throw new SQLException("Error al encontrar alérgenos por ingrediente: " + e.getMessage(), e);
         }

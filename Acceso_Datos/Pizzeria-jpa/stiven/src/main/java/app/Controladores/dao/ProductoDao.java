@@ -10,7 +10,7 @@ import jakarta.persistence.NoResultException;
 
 public interface ProductoDao {
 
-    void  delete(Producto producto) throws SQLException;
+    boolean  delete(Producto producto) throws SQLException;
 
     void update(Producto producto) throws SQLException;
 

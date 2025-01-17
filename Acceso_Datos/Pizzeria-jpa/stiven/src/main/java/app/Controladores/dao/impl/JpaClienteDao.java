@@ -7,6 +7,7 @@ import app.Controladores.dao.ClienteDao;
 import app.Modelo.Cliente;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 
 public class JpaClienteDao implements ClienteDao {
@@ -57,6 +58,8 @@ public class JpaClienteDao implements ClienteDao {
                 .setParameter("email", email)
                 .getSingleResult();
             return cliente;
+        } catch (NoResultException e) {
+            return null;
         } catch (Exception e) {
             throw new SQLException("Error al obtener el cliente por email: " + e.getMessage() + ". Email: " + email, e);
         }
