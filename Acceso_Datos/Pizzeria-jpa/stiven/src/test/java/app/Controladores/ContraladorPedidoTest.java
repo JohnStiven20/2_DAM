@@ -5,17 +5,18 @@ import org.junit.jupiter.api.Test;
 
 public class ContraladorPedidoTest {
 
+    private ContraladorPedido contraladorPedido = null;
 
     @BeforeEach
     void setUp() {
-
-        
-
+        contraladorPedido = new ContraladorPedido();
     }
 
     @Test
     void testAddCarrito() {
 
+
+        //contraladorPedido.addOrderLine(producto, cantidad, cliente);
     }
 
     @Test
@@ -53,8 +54,4 @@ public class ContraladorPedidoTest {
 
     }
 
-    @Test
-    void testSave() {
-
-    }
 }

@@ -43,7 +43,7 @@ public class ControladorClienteTest {
 
         controladorCliente.delete(clienteBaseDatos);
 
-        Cliente clienteNuevo = controladorCliente.loginCustomer("ana.nueva@example.com");
+        Cliente clienteNuevo = controladorCliente.loginCustomer("ana.nueva@example.com", "securePassword");
 
         assertNotEquals(clienteBaseDatos, clienteNuevo);
 
@@ -100,7 +100,7 @@ public class ControladorClienteTest {
     @Test
     void testLoginCustomer() throws SQLException {
 
-        Cliente cliente = controladorCliente.loginCustomer("juan@example.com");
+        Cliente cliente = controladorCliente.loginCustomer("juan@example.com", "password123");
         assertNotNull(cliente.getNombre(), "El nombre del cliente no debería ser nulo");
     }
 
@@ -124,7 +124,7 @@ public class ControladorClienteTest {
 
         Cliente clienteEsperado = new Cliente("67890123F", "Ana", "650987321", "ana.nueva@example.com", "Calle Nueva 456", "securePassword", new ArrayList<>(), false, "Gómez");
 
-        Cliente cliente = controladorCliente.loginCustomer("ana.nueva@example.com");
+        Cliente cliente = controladorCliente.loginCustomer("ana.nueva@example.com", "securePassword");
 
         assertEquals(clienteEsperado.getNombre(), cliente.getNombre());
 
@@ -149,7 +149,7 @@ public class ControladorClienteTest {
         
         controladorCliente.update(cliente);
 
-        Cliente clienteNuevo = controladorCliente.loginCustomer(cliente.getEmail());
+        Cliente clienteNuevo = controladorCliente.loginCustomer(cliente.getEmail(), cliente.getPassword());
 
         assertEquals(cliente.getTelefono(), clienteNuevo.getTelefono());
     }

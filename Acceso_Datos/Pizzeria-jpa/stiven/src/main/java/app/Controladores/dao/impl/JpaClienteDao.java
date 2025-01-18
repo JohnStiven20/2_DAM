@@ -54,9 +54,25 @@ public class JpaClienteDao implements ClienteDao {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             Cliente cliente = entityManager
-                .createQuery("SELECT c FROM Cliente c WHERE c.email = :email", Cliente.class)
-                .setParameter("email", email)
-                .getSingleResult();
+                    .createQuery("SELECT c FROM Cliente c WHERE c.email = :email", Cliente.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+            return cliente;
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            throw new SQLException("Error al obtener el cliente por email: " + e.getMessage() + ". Email: " + email, e);
+        }
+    }
+
+    public Cliente getClienteByEmailAndName(String nombre , String email) throws SQLException {
+
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            entityManager.getTransaction().begin();
+            Cliente cliente = entityManager
+                    .createQuery("SELECT c FROM Cliente c WHERE c.email = :email && c.password = :password", Cliente.class)
+                    .setParameter("email", email).setParameter("password", email)
+                    .getSingleResult();
             return cliente;
         } catch (NoResultException e) {
             return null;
@@ -70,8 +86,8 @@ public class JpaClienteDao implements ClienteDao {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             List<Cliente> listaCliente = entityManager
-                .createQuery("SELECT c FROM Cliente c", Cliente.class)
-                .getResultList();
+                    .createQuery("SELECT c FROM Cliente c", Cliente.class)
+                    .getResultList();
             return listaCliente;
         } catch (Exception e) {
             throw new SQLException("Error al obtener todos los clientes: " + e.getMessage(), e);
@@ -82,10 +98,18 @@ public class JpaClienteDao implements ClienteDao {
     public boolean save(Cliente cliente) throws SQLException {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try (entityManager) {
-            entityManager.getTransaction().begin();
-            entityManager.merge(cliente);
-            entityManager.getTransaction().commit();
-            return true;
+
+            Cliente clienteExiste = getAllCustomers().stream().filter(x -> x.getNombre().equals(cliente.getNombre())).findFirst().orElse(null);
+
+            if (clienteExiste == null) {
+                entityManager.getTransaction().begin();
+                entityManager.merge(cliente);
+                entityManager.getTransaction().commit();
+                return true;
+            } else {
+                return false;
+            }
+
         } catch (Exception e) {
             if (entityManager != null && entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();

@@ -35,8 +35,9 @@ public class ControladorCliente {
         clienteDao.update(cliente);
     }
 
-    public Cliente loginCustomer(String gmail) throws SQLException {
-        return  clienteDao.getClienteByEmail(gmail);
+    public Cliente loginCustomer(String gmail, String nombre) throws SQLException {
+        JpaClienteDao jpaClienteDao = ((JpaClienteDao) clienteDao);
+        return  jpaClienteDao.getClienteByEmailAndName(nombre, gmail);
     }
 
 }

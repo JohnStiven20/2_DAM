@@ -18,4 +18,5 @@ public interface ClienteDao {
     List<Cliente> getAllCustomers() throws SQLException;
 
 
+
 }

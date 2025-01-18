@@ -31,7 +31,7 @@ public class Cliente implements  Pagable {
     private String direccion;
     private String apellidos;
     
-    @OneToMany(mappedBy="cliente", cascade=CascadeType.ALL, orphanRemoval=true) 
+    @OneToMany(mappedBy="cliente", cascade={CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval=false) 
     private List<Pedido> listaPedidos;
 
     public Cliente(String dni, String nombre, String telefono, String email,String direccion , String password, List<Pedido> listaPedidos, Boolean admin, String apellidos) {

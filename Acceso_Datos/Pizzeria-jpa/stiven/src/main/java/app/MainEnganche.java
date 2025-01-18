@@ -2,88 +2,73 @@ package app;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
-import app.Controladores.ControladorProducto;
-import app.Controladores.dao.impl.JpaProducto;
+import app.Controladores.ContraladorPedido;
 import app.Enums.Size;
-import app.Modelo.Alergeno;
-import app.Modelo.Ingrediente;
+import app.Modelo.Bebida;
+import app.Modelo.Cliente;
+import app.Modelo.LineaPedido;
 import app.Modelo.Pasta;
+import app.Modelo.Pedido;
+import app.Modelo.Pedido.EstadoPedido;
 import app.Modelo.Pizza;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 
 public class MainEnganche {
 
     public static void main(String[] args) {
 
-        EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("default");
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             var entityTransaction = entityManager.getTransaction();
             entityTransaction.begin();
             entityTransaction.commit();
         }
 
-        ControladorProducto controladorProducto = new ControladorProducto();
+        Cliente cliente = new Cliente(
+                "67890123F", // DNI
+                "Ana", // Nombre
+                "650987321", // Teléfono
+                "ana.nueva@example.com", // Email
+                "Calle Nueva 456", // Dirección
+                "securePassword", // Contraseña
+                new ArrayList<>(), // Lista de pedidos vacía
+                false, // No es admin
+                "Gómez" // Apellidos
+        );
+        ContraladorPedido contraladorPedido = new ContraladorPedido();
 
-        JpaProducto jpaProducto = new JpaProducto();
+        ArrayList<LineaPedido> lineaPedidos = new ArrayList<>();
 
-        List<Ingrediente> ingredientes = new ArrayList<>();
+        Pizza pizza = new Pizza("Pizza", 75, Size.GRANDE, null);
+        Pasta pasta = new Pasta("Pasta", 4, Size.MEDIANO, null);
+        Bebida bebida = new Bebida("Bebida", 56, Size.GRANDE);
 
+        lineaPedidos.add(new LineaPedido(4, pizza));
+        lineaPedidos.add(new LineaPedido(50, pasta));
+        lineaPedidos.add(new LineaPedido(78, bebida));
 
-        Alergeno lactosa = new Alergeno("Lactosa");
-        Alergeno pepitilla = new Alergeno("Pepitilla");
-
-        List<Alergeno> alergenos = new ArrayList<>();
-
-        alergenos.add(lactosa);
-        alergenos.add(pepitilla);
-        
-
-        Ingrediente tomate = new Ingrediente("Tomate", alergenos);
-        Ingrediente cebolla = new Ingrediente("Cebolla", alergenos);
-        
-        ingredientes.add(tomate);
-        ingredientes.add(cebolla);
-
-
-        Pasta pasta = new Pasta("Pasta", 15, Size.GRANDE, ingredientes);
-        Pizza pizza = new Pizza("Pizza", 0, Size.MEDIANO, ingredientes);
-
-   
-
-        // ingredientes.add(new Ingrediente("Maria", null));
-        // ingredientes.add(new Ingrediente("Perez", null));
-
-        //Pizza pizza1 = new Pizza("Pizza", 4, Size.GRANDE, ingredientesNuevos);
-
+        Pedido pedido = new Pedido(EstadoPedido.ENTREGADO, lineaPedidos, null, null);
 
         try {
+            contraladorPedido.save(pedido);
 
-            jpaProducto.save(pasta);
-            jpaProducto.save(pizza);
-            //jpaProducto.save(pizza1);
+            contraladorPedido.addOrderLine(pizza, 5, cliente);
 
-        } catch (NoResultException | SQLException e) {
+            cliente.setId(1);
+
+            Pedido pedidoCliente = contraladorPedido.getOrdersByStatus(EstadoPedido.PEDIENTE, cliente).stream().findFirst().orElse(null);
+            System.out.println(pedidoCliente.toString());
+
+            contraladorPedido.delete(pedidoCliente);
+
+
+            
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        Ingrediente ingrediente = new Ingrediente(1, null, null);
-        List<Alergeno> alergenosNuevos = null;
-
-        try {
-            alergenos = controladorProducto.getAlergenosByIngredient(ingrediente);
-             System.out.println("BUENAS TARDES ");
-            alergenos.forEach(x -> System.out.println(x + "viva españa"));
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-
-    
     }
 }

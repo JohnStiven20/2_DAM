@@ -1,6 +1,5 @@
 package app.Controladores.dao.impl;
 
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class JpaPedidoDao implements PedidoDao {
     public void save(Pedido pedido) throws SQLException {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try (entityManager) {
+
             entityManager.getTransaction().begin();
             entityManager.merge(pedido);
             entityManager.getTransaction().commit();
@@ -44,16 +44,41 @@ public class JpaPedidoDao implements PedidoDao {
     @Override
     public void delete(Pedido pedido) throws SQLException {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try (entityManager) {
+        try {
             entityManager.getTransaction().begin();
-            Pedido managedPedido = entityManager.contains(pedido) ? pedido : entityManager.merge(pedido);
-            entityManager.remove(managedPedido);
+
+            // Verificar si el pedido está gestionado por el EntityManager
+            Pedido managedPedido = entityManager.contains(pedido) ? pedido
+                    : entityManager.find(Pedido.class, pedido.getId());
+
+            if (managedPedido != null) {
+                // Desvincular el pedido de su cliente
+                Cliente cliente = managedPedido.getCliente();
+                if (cliente != null) {
+                    cliente.getListaPedidos().remove(managedPedido);
+                    managedPedido.setCliente(null);
+                }
+
+                // Desvincular líneas de pedido
+                if (managedPedido.getLineaPedidos() != null) {
+                    for (LineaPedido linea : managedPedido.getLineaPedidos()) {
+                        linea.setPedido(null);
+                    }
+                    managedPedido.getLineaPedidos().clear();
+                }
+
+                // Eliminar el pedido
+                entityManager.remove(managedPedido);
+            }
+
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (entityManager != null && entityManager.getTransaction().isActive()) {
+            if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
             throw new SQLException("Error al eliminar el pedido: " + e.getMessage(), e);
+        } finally {
+            entityManager.close();
         }
     }
 
@@ -74,13 +99,11 @@ public class JpaPedidoDao implements PedidoDao {
 
     @Override
     public List<Pedido> getOrdersByCustumer(Cliente cliente) throws SQLException {
-        String consulta = "SELECT pedido.* FROM pedido WHERE pedido.cliente_id = :id";
+        String consulta = "SELECT p FROM Pedido p WHERE p.cliente.id = :id";
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            @SuppressWarnings("unchecked")
-            List<Pedido> listaPedidos = entityManager.createNativeQuery(consulta, Pedido.class)
-                .setParameter("id", cliente.getId())
-                .getResultList();
-            return listaPedidos;
+            return entityManager.createQuery(consulta, Pedido.class)
+                    .setParameter("id", cliente.getId())
+                    .getResultList();
         } catch (Exception e) {
             throw new SQLException("Error al obtener los pedidos del cliente: " + e.getMessage(), e);
         }
@@ -88,14 +111,11 @@ public class JpaPedidoDao implements PedidoDao {
 
     @Override
     public List<LineaPedido> getLineasOrdersByOrder(Pedido pedido) throws SQLException {
-        String consulta = "SELECT lineapedido.* FROM lineapedido JOIN pedido ON pedido.id = lineapedido.pedido_id WHERE pedido.id = :id";
-        
+        String consulta = "SELECT c FROM Pedido c WHERE c.id = :id";
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            @SuppressWarnings("unchecked")
-            List<LineaPedido> listaLineas = entityManager.createNativeQuery(consulta, LineaPedido.class)
-                .setParameter("id", pedido.getId())
-                .getResultList();
-            return listaLineas;
+            return entityManager.createQuery(consulta, LineaPedido.class)
+                    .setParameter("id", pedido.getId())
+                    .getResultList();
         } catch (Exception e) {
             throw new SQLException("Error al obtener las líneas del pedido: " + e.getMessage(), e);
         }
@@ -103,13 +123,12 @@ public class JpaPedidoDao implements PedidoDao {
 
     @Override
     public List<Pedido> getOrdersByStatus(EstadoPedido estadoPedido, Cliente cliente) throws SQLException {
-        String consulta = "SELECT pedido.* FROM pedido WHERE pedido.estado = :estado";
+        String consulta = "SELECT p FROM Pedido p WHERE p.estado = :estado AND p.cliente.id = :id";
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            @SuppressWarnings("unchecked")
-            List<Pedido> listaPedidos = entityManager.createNativeQuery(consulta, Pedido.class)
-                .setParameter("estado", estadoPedido.name())
-                .getResultList();
-            return listaPedidos;
+            return entityManager.createQuery(consulta, Pedido.class)
+                    .setParameter("estado", estadoPedido)
+                    .setParameter("id", cliente.getId())
+                    .getResultList();
         } catch (Exception e) {
             throw new SQLException("Error al obtener los pedidos por estado: " + e.getMessage(), e);
         }
@@ -120,7 +139,7 @@ public class JpaPedidoDao implements PedidoDao {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try (entityManager) {
             entityManager.getTransaction().begin();
-            LineaPedido lineaPedido = new LineaPedido(cantidad, producto, pedido);
+            LineaPedido lineaPedido = new LineaPedido(cantidad, producto);
             pedido.getLineaPedidos().add(lineaPedido);
             entityManager.merge(pedido);
             entityManager.getTransaction().commit();

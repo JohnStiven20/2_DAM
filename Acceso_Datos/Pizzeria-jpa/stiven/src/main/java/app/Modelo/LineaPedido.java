@@ -24,19 +24,16 @@ public class LineaPedido {
     private Pedido pedido;
 
 
-    public LineaPedido(int id, int cantidad, Producto producto, Pedido pedido) {
+    public LineaPedido(int id, int cantidad, Producto producto) {
         this.cantidad = cantidad;
         this.id = id;
         this.producto = producto;
-        this.pedido = pedido;
     }
 
     
-
-    public LineaPedido(int cantidad, Producto producto, Pedido pedido) {
+    public LineaPedido(int cantidad, Producto producto) {
         this.cantidad = cantidad;
         this.producto = producto;
-        this.pedido = pedido;
     }
 
     public LineaPedido() {

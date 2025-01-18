@@ -38,7 +38,7 @@ public class Pedido {
     private List<LineaPedido> lineaPedidos;
     
     
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name = "cliente_id", nullable = true)
     private Cliente cliente;
     @Transient
@@ -124,7 +124,7 @@ public class Pedido {
         sb.append("id=").append(id);
         sb.append(", fecha=").append(fecha);
         sb.append(", estado=").append(estado);
-        sb.append(", lineaPedidos=").append(lineaPedidos);
+
         sb.append('}');
         return sb.toString();
     }
