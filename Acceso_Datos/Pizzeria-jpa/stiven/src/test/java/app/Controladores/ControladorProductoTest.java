@@ -17,13 +17,10 @@ import app.Modelo.Ingrediente;
 import app.Modelo.Pasta;
 import app.Modelo.Pizza;
 import app.Modelo.Producto;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 
 public class ControladorProductoTest {
 
     private ControladorProducto controladorProducto;
-    EntityManagerFactory entityManagerFactory;
 
     @BeforeEach
     void setUp() {
@@ -74,14 +71,10 @@ public class ControladorProductoTest {
     @Test
     void testUpdate() throws SQLException {
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
 
-            Producto producto = entityManager
-            .createQuery("SELECT c FROM Producto c WHERE c.id = :id", Producto.class)
-            .setParameter("id", 1)
-            .getSingleResult();
+           Producto producto = controladorProducto.getAllProducts().stream().findFirst().get();
 
             Pizza pizza = ((Pizza) producto);
 
@@ -91,35 +84,24 @@ public class ControladorProductoTest {
 
             controladorProducto.update(pizza);
 
-            Producto productoActualizado = entityManager.createQuery(
-                    "SELECT c FROM Producto c WHERE c.id = :id", Producto.class)
-                    .setParameter("id", 1)
-                    .getSingleResult();
+    
 
-            Pizza pizzaActualizada = ((Pizza) productoActualizado);
+            Pizza pizzaActualizada = ((Pizza) producto);
 
             assertEquals("Quatro Quesos 5", pizzaActualizada.getNombre(), "El nombre de la pizza no coincide");
             assertEquals(5.0, pizzaActualizada.getPrecio(), 0.001, "El precio de la pizza no coincide");
 
         } catch (SQLException e) {
             throw new SQLException("Algo va mal");
-        } finally {
-            if (entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
+        } 
 
     }
 
     @Test
     void testGetIngrediente() throws SQLException {
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-        Producto producto = entityManager
-            .createQuery("SELECT c FROM Producto c WHERE c.id = :id", Producto.class)
-            .setParameter("id", 1)
-            .getSingleResult();
+        Producto producto = controladorProducto.getAllProducts().stream().findFirst().get();
 
         List<Ingrediente> ingredientes = controladorProducto.getIngredientsByProduct(producto);
 

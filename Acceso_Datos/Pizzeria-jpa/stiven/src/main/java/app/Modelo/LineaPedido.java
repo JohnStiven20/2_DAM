@@ -23,13 +23,11 @@ public class LineaPedido {
     @JoinColumn(name = "pedido_id", nullable = true)
     private Pedido pedido;
 
-
     public LineaPedido(int id, int cantidad, Producto producto) {
         this.cantidad = cantidad;
         this.id = id;
         this.producto = producto;
     }
-
     
     public LineaPedido(int cantidad, Producto producto) {
         this.cantidad = cantidad;

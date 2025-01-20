@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import app.Controladores.ContraladorPedido;
+import app.Controladores.ControladorCliente;
 import app.Enums.Size;
+import app.MetodosPagos.PagarEfectivo;
 import app.Modelo.Bebida;
 import app.Modelo.Cliente;
 import app.Modelo.LineaPedido;
@@ -28,17 +30,18 @@ public class MainEnganche {
         }
 
         Cliente cliente = new Cliente(
-                "67890123F", // DNI
-                "Ana", // Nombre
-                "650987321", // Teléfono
-                "ana.nueva@example.com", // Email
-                "Calle Nueva 456", // Dirección
-                "securePassword", // Contraseña
-                new ArrayList<>(), // Lista de pedidos vacía
-                false, // No es admin
-                "Gómez" // Apellidos
+                "67890123F", 
+                "Ana", 
+                "650987321", 
+                "ana.nueva@example.com", 
+                "Calle Nueva 456", 
+                "securePassword",
+                new ArrayList<>(), 
+                false, 
+                "Gómez" 
         );
         ContraladorPedido contraladorPedido = new ContraladorPedido();
+        ControladorCliente controladorCliente = new ControladorCliente();
 
         ArrayList<LineaPedido> lineaPedidos = new ArrayList<>();
 
@@ -50,21 +53,17 @@ public class MainEnganche {
         lineaPedidos.add(new LineaPedido(50, pasta));
         lineaPedidos.add(new LineaPedido(78, bebida));
 
-        Pedido pedido = new Pedido(EstadoPedido.ENTREGADO, lineaPedidos, null, null);
+        Pedido pedido = new Pedido(EstadoPedido.ENTREGADO, lineaPedidos, cliente, new PagarEfectivo());
 
         try {
             contraladorPedido.save(pedido);
 
-            contraladorPedido.addOrderLine(pizza, 5, cliente);
+            Cliente clienteBaseDatos = controladorCliente.getAllCusturmers().stream().filter(usuario -> usuario.getEmail().equals("ana.nueva@example.com")).findFirst().orElse(null);
 
-            cliente.setId(1);
+            contraladorPedido.addOrderLine(pizza, 5, clienteBaseDatos);
 
-            Pedido pedidoCliente = contraladorPedido.getOrdersByStatus(EstadoPedido.PEDIENTE, cliente).stream().findFirst().orElse(null);
+            Pedido pedidoCliente = contraladorPedido.getOrdersByStatus(EstadoPedido.PEDIENTE, clienteBaseDatos).stream().findFirst().orElse(null);
             System.out.println(pedidoCliente.toString());
-
-            contraladorPedido.delete(pedidoCliente);
-
-
             
         } catch (SQLException e) {
             System.out.println(e.getMessage());

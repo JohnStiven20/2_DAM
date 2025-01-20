@@ -14,7 +14,6 @@ import app.Modelo.LineaPedido;
 import app.Modelo.Pedido;
 import app.Modelo.Pedido.EstadoPedido;
 import app.Modelo.Producto;
-import jakarta.persistence.NoResultException;
 
 public class ContraladorPedido {
 
@@ -35,8 +34,8 @@ public class ContraladorPedido {
         pedidoDao2.save(pedido);
     }
 
-    public void getLineasOrdersByOrder(Pedido pedido) throws SQLException {
-        pedidoDao2.getLineasOrdersByOrder(pedido).forEach(x -> System.out.println(x));
+    public List<LineaPedido> getLineasOrdersByOrder(Pedido pedido) throws SQLException {
+        return pedidoDao2.getLineasOrdersByOrder(pedido);
     }
 
     public List<Pedido> getOrdersByStatus(Pedido.EstadoPedido estadoPedido, Cliente cliente) throws SQLException {
@@ -48,36 +47,49 @@ public class ContraladorPedido {
     }
 
     public void addOrderLine(Producto producto, int cantidad, Cliente cliente) throws SQLException {
-
-        ArrayList<LineaPedido> lisatLineaPedidos = new ArrayList<>();
         List<Pedido> listaPedidos = pedidoDao2.getOrdersByStatus(EstadoPedido.PEDIENTE, cliente);
         Pedido pedido = listaPedidos.stream().findFirst().orElse(null);
-
-        Producto productoEncontrado = null;
-
-        if (pedido != null) {
-            pedidoDao2.addOrderLine(cantidad, producto, pedido);
-        } else {
-
-            try {
-
-                productoEncontrado = productoDao.getAllProducts().stream().filter(x -> x.getNombre().equals(producto.getNombre())).findFirst().orElse(null);
-            } catch (NoResultException e) {
+    
+        try {
+            Producto productoEncontrado = productoDao.getAllProducts()
+                    .stream()
+                    .filter(x -> x.getNombre().equals(producto.getNombre()))
+                    .findFirst()
+                    .orElse(null);
+    
+            // Si no se encuentra el producto, guárdalo
+            if (productoEncontrado == null) {
                 productoDao.save(producto);
-                productoEncontrado = productoDao.getAllProducts().stream().filter(x -> x.getNombre().equals(producto.getNombre())).findFirst().orElse(null);
-
+                productoEncontrado = productoDao.getAllProducts()
+                        .stream()
+                        .filter(x -> x.getNombre().equals(producto.getNombre()))
+                        .findFirst()
+                        .orElse(null);
             }
-
-            Pedido pedidoNuevo = new Pedido(null, null, null, null);
-            pedidoNuevo.setEstado(EstadoPedido.PEDIENTE);
-            pedidoNuevo.setCliente(cliente);
-            LineaPedido lineaPedido = new LineaPedido(cantidad, productoEncontrado);
-            lisatLineaPedidos.add(lineaPedido);
-            pedidoNuevo.setLineaPedidos(lisatLineaPedidos);
-            pedidoDao2.save(pedidoNuevo);
-        }    
-
+    
+            if (pedido != null) {
+                // Agregar línea al pedido existente
+                pedidoDao2.addOrderLine(cantidad, productoEncontrado, pedido);
+            } else {
+                // Crear un nuevo pedido
+                Pedido pedidoNuevo = new Pedido();
+                pedidoNuevo.setEstado(EstadoPedido.PEDIENTE);
+                pedidoNuevo.setCliente(cliente);
+    
+                LineaPedido lineaPedido = new LineaPedido(cantidad, productoEncontrado);
+                List<LineaPedido> listaLineaPedidos = new ArrayList<>();
+                listaLineaPedidos.add(lineaPedido);
+    
+                pedidoNuevo.setLineaPedidos(listaLineaPedidos);
+    
+                // Guardar el nuevo pedido
+                pedidoDao2.save(pedidoNuevo);
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error al agregar una línea al pedido: " + e.getMessage(), e);
+        }
     }
+    
 
     public void finalizarPedido(Pagable metodoPago, Cliente cliente) throws SQLException {
         Pedido pedido = pedidoDao2.getOrdersByStatus(EstadoPedido.PEDIENTE, cliente).stream().findFirst().get();
@@ -97,4 +109,5 @@ public class ContraladorPedido {
         pedido.setEstado(EstadoPedido.ENTREGADO);
         pedidoDao2.update(pedido);
     }
+
 }

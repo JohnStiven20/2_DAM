@@ -137,7 +137,8 @@ public class ControladorClienteTest {
 
         boolean estado = controladorCliente.save(cliente);
 
-        assertEquals(estado, true);
+        // El usuario ya existe
+        assertEquals(estado, false);
     }
 
     @Test

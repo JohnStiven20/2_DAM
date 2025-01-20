@@ -2,7 +2,6 @@ package app.Modelo;
 
 import java.util.List;
 
-import app.Interfaces.Pagable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +12,7 @@ import jakarta.persistence.OneToMany;
 
 
 @Entity
-//@Table(name = "cliente") // Asegúrate de que coincida con el nombre real de la tabla en la base de datos
-public class Cliente implements  Pagable {
+public class Cliente  {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -137,12 +135,6 @@ public class Cliente implements  Pagable {
         return "Cliente [id=" + id + ", dni=" + dni + ", nombre=" + nombre + ", telefono=" + telefono + ", email="
                 + email + ", password=" + password + ", admin=" + admin + ", direccion=" + direccion + "]";
     }
-
-    @Override
-    public void pagar(double cantidad) {
-        System.out.println("Pagar");
-    }
-
 
     public String getDireccion() {
         return direccion;

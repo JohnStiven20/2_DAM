@@ -15,7 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
+import jakarta.persistence.OneToOne;
 
 
 /**
@@ -41,7 +41,8 @@ public class Pedido {
     @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name = "cliente_id", nullable = true)
     private Cliente cliente;
-    @Transient
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinColumn(name = "pagable_id")
     private Pagable pagable;
 
     public Pedido() {

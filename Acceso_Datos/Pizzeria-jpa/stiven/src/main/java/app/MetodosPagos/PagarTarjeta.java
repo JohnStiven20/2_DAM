@@ -1,12 +1,15 @@
 package app.MetodosPagos;
 
 import app.Interfaces.Pagable;
-
-public class PagarTarjeta implements Pagable {
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+@Entity
+@DiscriminatorValue(value="PagarTarjeta")
+public class PagarTarjeta extends  Pagable {
 
     @Override
-    public void pagar(double cantidad) {
-        System.out.println("Has pagado con tarjeta");
+    public int pagar() {
+        return 2;
     }
-    
+
 }

@@ -8,9 +8,10 @@
         <class>org.example.modelo.Ingrediente</class>
         <class>org.example.modelo.Producto</class>
         <class>org.example.modelo.Alergeno</class>
+        <class>org.example.Interfaces.Pagable</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/pizzeria2"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/pizzeria-jpa"/>
             <property name="jakarta.persistence.jdbc.user" value="root"/>
             <property name="jakarta.persistence.jdbc.password" value="admin"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />

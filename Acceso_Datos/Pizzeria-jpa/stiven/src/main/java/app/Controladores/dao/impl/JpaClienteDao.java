@@ -65,21 +65,24 @@ public class JpaClienteDao implements ClienteDao {
         }
     }
 
-    public Cliente getClienteByEmailAndName(String nombre , String email) throws SQLException {
-
+    public Cliente getClienteByEmailAndName(String nombre, String email) throws SQLException {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             entityManager.getTransaction().begin();
             Cliente cliente = entityManager
-                    .createQuery("SELECT c FROM Cliente c WHERE c.email = :email && c.password = :password", Cliente.class)
-                    .setParameter("email", email).setParameter("password", email)
+                    .createQuery("SELECT c FROM Cliente c WHERE c.email = :email AND c.password = :password", Cliente.class)
+                    .setParameter("email", email)
+                    .setParameter("password", nombre)
                     .getSingleResult();
             return cliente;
         } catch (NoResultException e) {
+            // Si no se encuentra ningún resultado, devuelve null
             return null;
         } catch (Exception e) {
-            throw new SQLException("Error al obtener el cliente por email: " + e.getMessage() + ". Email: " + email, e);
+            // Manejo de errores
+            throw new SQLException("Error al obtener el cliente por email y nombre: " + e.getMessage() + ". Email: " + email, e);
         }
     }
+    
 
     @Override
     public List<Cliente> getAllCustomers() throws SQLException {
@@ -117,4 +120,5 @@ public class JpaClienteDao implements ClienteDao {
             throw new SQLException("Error al guardar el cliente: " + e.getMessage() + ". Cliente: " + cliente, e);
         }
     }
+
 }
