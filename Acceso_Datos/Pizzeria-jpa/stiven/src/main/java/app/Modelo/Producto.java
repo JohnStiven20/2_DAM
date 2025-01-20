@@ -30,7 +30,7 @@ public class Producto {
     @Enumerated(EnumType.STRING)
     private Size size;
 
-    @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+    @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
     private List<Ingrediente> ingredientes;
     
     protected Producto(String nombre, double precio) {

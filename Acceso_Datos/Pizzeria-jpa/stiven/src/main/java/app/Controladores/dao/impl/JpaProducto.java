@@ -20,11 +20,6 @@ public class JpaProducto implements ProductoDao {
 
     public JpaProducto() {
         this.entityManagerFactory = Persistence.createEntityManagerFactory("default");
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            var entityTransaction = entityManager.getTransaction();
-            entityTransaction.begin();
-            entityTransaction.commit();
-        }
     }
 
     @Override
@@ -32,20 +27,12 @@ public class JpaProducto implements ProductoDao {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            Producto managedProducto = entityManager.contains(producto) ? producto : entityManager.merge(producto);
-            entityManager.remove(managedProducto);
+            Producto productoBaseDatos = entityManager.contains(producto) ? producto : entityManager.merge(producto);
+            entityManager.remove(productoBaseDatos);
             entityManager.getTransaction().commit();
-            return true; // Eliminación exitosa
+            return true; 
         } catch (Exception e) {
-            if (entityManager != null && entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
-            System.err.println("Error al eliminar el producto: " + e.getMessage());
-            return false; // Error durante la eliminación
-        } finally {
-            if (entityManager.isOpen()) {
-                entityManager.close();
-            }
+            return false; 
         }
     }
 
@@ -57,9 +44,6 @@ public class JpaProducto implements ProductoDao {
             entityManager.merge(producto);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (entityManager != null && entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
             throw new SQLException("Error al actualizar el producto: " + e.getMessage(), e);
         }
     }
@@ -76,13 +60,10 @@ public class JpaProducto implements ProductoDao {
                         .setParameter("nombre", producto.getNombre())
                         .getSingleResult();
 
-                // el producto existente no debe hacer nada
             } catch (NoResultException e) {
-                // Persistir nuevo producto
                 if (producto instanceof Bebida) {
                     entityManager.persist(producto);
                 } else {
-                    // Gestionar ingredientes
                     if (producto.getIngredientes() != null) {
 
                         ArrayList<Ingrediente> ingredientesBaseDatos = new ArrayList<>();
@@ -101,33 +82,20 @@ public class JpaProducto implements ProductoDao {
 
             entityManager.getTransaction().commit();
         } catch (SQLException e) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
             throw new SQLException("Error al guardar el producto: " + e.getMessage(), e);
-        } finally {
-            if (entityManager.isOpen()) {
-                entityManager.close();
-            }
-        }
+        } 
     }
 
     public Ingrediente saveIngrediente(EntityManager entityManager, Ingrediente ingrediente) throws SQLException {
-        if (ingrediente == null) {
-            throw new IllegalArgumentException("El ingrediente no puede ser null");
-        }
-
+        
         try {
-            // Verificar si el ingrediente ya existe
             Ingrediente ingredienteBaseDatos = entityManager
                     .createQuery("SELECT c FROM Ingrediente c WHERE c.nombre = :nombre", Ingrediente.class)
                     .setParameter("nombre", ingrediente.getNombre())
                     .getSingleResult();
 
-            // Actualizar o devolver ingrediente existente
             return entityManager.merge(ingredienteBaseDatos);
         } catch (NoResultException e) {
-            // Gestionar alérgenos y persistir nuevo ingrediente
 
             if (ingrediente.getAlergenos() != null) {
                 ArrayList<Alergeno> alergenosBaseDatos = new ArrayList<>();
@@ -139,26 +107,19 @@ public class JpaProducto implements ProductoDao {
                 ingrediente.setAlergenos(alergenosBaseDatos);
 
             }
-            return entityManager.merge(ingrediente); // Usar merge para asociarlo al contexto
+            return entityManager.merge(ingrediente); 
         }
     }
 
     public Alergeno saveAlergeno(EntityManager entityManager, Alergeno alergeno) throws SQLException {
-        if (alergeno == null) {
-            throw new IllegalArgumentException("El alérgeno no puede ser null");
-        }
-
+      
         try {
-            // Verificar si el alérgeno ya existe
             Alergeno alergenoBaseDatos = entityManager
                     .createQuery("SELECT c FROM Alergeno c WHERE c.nombre = :nombre", Alergeno.class)
                     .setParameter("nombre", alergeno.getNombre())
                     .getSingleResult();
-
-            // Actualizar o devolver alérgeno existente
             return entityManager.merge(alergenoBaseDatos);
         } catch (NoResultException e) {
-            // Persistir nuevo alérgeno
             return entityManager.merge(alergeno);
         }
     }

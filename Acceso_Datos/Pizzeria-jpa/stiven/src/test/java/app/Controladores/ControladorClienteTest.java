@@ -27,15 +27,15 @@ public class ControladorClienteTest {
     void testDelete() throws SQLException {
 
         Cliente cliente = new Cliente(
-            "67890123F", // DNI
-            "Ana", // Nombre
-            "650987321", // Teléfono
-            "ana.nueva@example.com", // Email
-            "Calle Nueva 456", // Dirección
-            "securePassword", // Contraseña
-            new ArrayList<>(), // Lista de pedidos vacía
-            false, // No es admin
-            "Gómez" // Apellidos
+            "67890123F", 
+            "Ana", 
+            "650987321", 
+            "ana.nueva@example.com", 
+            "Calle Nueva 456", 
+            "securePassword", 
+            new ArrayList<>(), 
+            false, 
+            "Gómez" 
     );
         controladorCliente.save(cliente);
 
@@ -52,15 +52,15 @@ public class ControladorClienteTest {
     @Test
     void testFindByEmail() throws SQLException {
         Cliente clienteNuevo = new Cliente(
-            "67890123F", // DNI
-            "Ana", // Nombre
-            "650987321", // Teléfono
-            "ana.nueva@example.com", // Email
-            "Calle Nueva 456", // Dirección
-            "securePassword", // Contraseña
-            new ArrayList<>(), // Lista de pedidos vacía
-            false, // No es admin
-            "Gómez" // Apellidos
+            "67890123F", 
+            "Ana", 
+            "650987321", 
+            "ana.nueva@example.com", 
+            "Calle Nueva 456", 
+            "securePassword",
+            new ArrayList<>(), 
+            false,
+            "Gómez" 
     );
         controladorCliente.save(clienteNuevo);
 
@@ -78,15 +78,15 @@ public class ControladorClienteTest {
         assertEquals(clientes.size(), 5);
 
         Cliente clienteNuevo = new Cliente(
-                "67890123F", // DNI
-                "Ana", // Nombre
-                "650987321", // Teléfono
-                "ana.nueva@example.com", // Email
-                "Calle Nueva 456", // Dirección
-                "securePassword", // Contraseña
-                new ArrayList<>(), // Lista de pedidos vacía
-                false, // No es admin
-                "Gómez" // Apellidos
+                "67890123F", 
+                "Ana", 
+                "650987321", 
+                "ana.nueva@example.com", 
+                "Calle Nueva 456",
+                "securePassword",
+                new ArrayList<>(), 
+                false, 
+                "Gómez" 
         );
 
         controladorCliente.save(clienteNuevo);
@@ -108,18 +108,17 @@ public class ControladorClienteTest {
     void testRegisterCustomer() throws SQLException {
 
         Cliente clienteNuevo = new Cliente(
-                "67890123F", // DNI
-                "Ana", // Nombre
-                "650987321", // Teléfono
-                "ana.nueva@example.com", // Email
-                "Calle Nueva 456", // Dirección
-                "securePassword", // Contraseña
-                new ArrayList<>(), // Lista de pedidos vacía
-                false, // No es admin
-                "Gómez" // Apellidos
+                "67890123F", 
+                "Ana",
+                "650987321", 
+                "ana.nueva@example.com", 
+                "Calle Nueva 456", 
+                "securePassword", 
+                new ArrayList<>(), 
+                false, 
+                "Gómez" 
         );
 
-        // Llamar al método registerCustomer y verificar que se invoque el save del DAO
         controladorCliente.save(clienteNuevo);
 
         Cliente clienteEsperado = new Cliente("67890123F", "Ana", "650987321", "ana.nueva@example.com", "Calle Nueva 456", "securePassword", new ArrayList<>(), false, "Gómez");

@@ -1,16 +1,16 @@
 -------------------------------------------------------------------------------
 Test set: app.Controladores.ContraladorPedidoTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 6, Skipped: 0, Time elapsed: 26.83 s <<< FAILURE! -- in app.Controladores.ContraladorPedidoTest
-app.Controladores.ContraladorPedidoTest.testEntregarPedido -- Time elapsed: 6.261 s <<< ERROR!
-java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@4b09d1c3 is closed
+Tests run: 7, Failures: 0, Errors: 6, Skipped: 0, Time elapsed: 28.34 s <<< FAILURE! -- in app.Controladores.ContraladorPedidoTest
+app.Controladores.ContraladorPedidoTest.testEntregarPedido -- Time elapsed: 6.437 s <<< ERROR!
+java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@b841713 is closed
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.errorIfClosed(AbstractLogicalConnectionImplementor.java:37)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:136)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getConnectionForTransactionManagement(LogicalConnectionManagedImpl.java:267)
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.rollback(AbstractLogicalConnectionImplementor.java:121)
 	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.rollback(JdbcResourceLocalTransactionCoordinatorImpl.java:304)
 	at org.hibernate.engine.transaction.internal.TransactionImpl.rollback(TransactionImpl.java:142)
-	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:58)
+	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:54)
 	at app.Controladores.ContraladorPedido.save(ContraladorPedido.java:34)
 	at app.Controladores.ContraladorPedidoTest.insetarDatos(ContraladorPedidoTest.java:227)
 	at app.Controladores.ContraladorPedidoTest.setUp(ContraladorPedidoTest.java:31)
@@ -18,15 +18,15 @@ java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalCon
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 
-app.Controladores.ContraladorPedidoTest.testGetLineasOrdersByOrder -- Time elapsed: 3.184 s <<< ERROR!
-java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@65e92505 is closed
+app.Controladores.ContraladorPedidoTest.testGetLineasOrdersByOrder -- Time elapsed: 3.676 s <<< ERROR!
+java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@24f5e9e8 is closed
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.errorIfClosed(AbstractLogicalConnectionImplementor.java:37)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:136)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getConnectionForTransactionManagement(LogicalConnectionManagedImpl.java:267)
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.rollback(AbstractLogicalConnectionImplementor.java:121)
 	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.rollback(JdbcResourceLocalTransactionCoordinatorImpl.java:304)
 	at org.hibernate.engine.transaction.internal.TransactionImpl.rollback(TransactionImpl.java:142)
-	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:58)
+	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:54)
 	at app.Controladores.ContraladorPedido.save(ContraladorPedido.java:34)
 	at app.Controladores.ContraladorPedidoTest.insetarDatos(ContraladorPedidoTest.java:227)
 	at app.Controladores.ContraladorPedidoTest.setUp(ContraladorPedidoTest.java:31)
@@ -34,15 +34,15 @@ java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalCon
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 
-app.Controladores.ContraladorPedidoTest.testCancelarPedido -- Time elapsed: 2.921 s <<< ERROR!
-java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@2e03bb74 is closed
+app.Controladores.ContraladorPedidoTest.testCancelarPedido -- Time elapsed: 3.069 s <<< ERROR!
+java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@6a30f6b1 is closed
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.errorIfClosed(AbstractLogicalConnectionImplementor.java:37)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:136)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getConnectionForTransactionManagement(LogicalConnectionManagedImpl.java:267)
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.rollback(AbstractLogicalConnectionImplementor.java:121)
 	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.rollback(JdbcResourceLocalTransactionCoordinatorImpl.java:304)
 	at org.hibernate.engine.transaction.internal.TransactionImpl.rollback(TransactionImpl.java:142)
-	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:58)
+	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:54)
 	at app.Controladores.ContraladorPedido.save(ContraladorPedido.java:34)
 	at app.Controladores.ContraladorPedidoTest.insetarDatos(ContraladorPedidoTest.java:227)
 	at app.Controladores.ContraladorPedidoTest.setUp(ContraladorPedidoTest.java:31)
@@ -50,15 +50,15 @@ java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalCon
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 
-app.Controladores.ContraladorPedidoTest.testGetOrdersByCustumer -- Time elapsed: 2.950 s <<< ERROR!
-java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@3c070ade is closed
+app.Controladores.ContraladorPedidoTest.testGetOrdersByCustumer -- Time elapsed: 3.224 s <<< ERROR!
+java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@2c3f81ef is closed
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.errorIfClosed(AbstractLogicalConnectionImplementor.java:37)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:136)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getConnectionForTransactionManagement(LogicalConnectionManagedImpl.java:267)
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.rollback(AbstractLogicalConnectionImplementor.java:121)
 	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.rollback(JdbcResourceLocalTransactionCoordinatorImpl.java:304)
 	at org.hibernate.engine.transaction.internal.TransactionImpl.rollback(TransactionImpl.java:142)
-	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:58)
+	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:54)
 	at app.Controladores.ContraladorPedido.save(ContraladorPedido.java:34)
 	at app.Controladores.ContraladorPedidoTest.insetarDatos(ContraladorPedidoTest.java:227)
 	at app.Controladores.ContraladorPedidoTest.setUp(ContraladorPedidoTest.java:31)
@@ -66,15 +66,15 @@ java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalCon
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 
-app.Controladores.ContraladorPedidoTest.testFinalizarPedido -- Time elapsed: 2.836 s <<< ERROR!
-java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@7d96618 is closed
+app.Controladores.ContraladorPedidoTest.testFinalizarPedido -- Time elapsed: 3.121 s <<< ERROR!
+java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@5ea24702 is closed
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.errorIfClosed(AbstractLogicalConnectionImplementor.java:37)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:136)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getConnectionForTransactionManagement(LogicalConnectionManagedImpl.java:267)
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.rollback(AbstractLogicalConnectionImplementor.java:121)
 	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.rollback(JdbcResourceLocalTransactionCoordinatorImpl.java:304)
 	at org.hibernate.engine.transaction.internal.TransactionImpl.rollback(TransactionImpl.java:142)
-	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:58)
+	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:54)
 	at app.Controladores.ContraladorPedido.save(ContraladorPedido.java:34)
 	at app.Controladores.ContraladorPedidoTest.insetarDatos(ContraladorPedidoTest.java:227)
 	at app.Controladores.ContraladorPedidoTest.setUp(ContraladorPedidoTest.java:31)
@@ -82,15 +82,15 @@ java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalCon
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 
-app.Controladores.ContraladorPedidoTest.testGetOrdersByStatus -- Time elapsed: 2.916 s <<< ERROR!
-java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@5248474e is closed
+app.Controladores.ContraladorPedidoTest.testGetOrdersByStatus -- Time elapsed: 3.137 s <<< ERROR!
+java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@69aecbba is closed
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.errorIfClosed(AbstractLogicalConnectionImplementor.java:37)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:136)
 	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getConnectionForTransactionManagement(LogicalConnectionManagedImpl.java:267)
 	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.rollback(AbstractLogicalConnectionImplementor.java:121)
 	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.rollback(JdbcResourceLocalTransactionCoordinatorImpl.java:304)
 	at org.hibernate.engine.transaction.internal.TransactionImpl.rollback(TransactionImpl.java:142)
-	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:58)
+	at app.Controladores.dao.impl.JpaPedidoDao.save(JpaPedidoDao.java:54)
 	at app.Controladores.ContraladorPedido.save(ContraladorPedido.java:34)
 	at app.Controladores.ContraladorPedidoTest.insetarDatos(ContraladorPedidoTest.java:227)
 	at app.Controladores.ContraladorPedidoTest.setUp(ContraladorPedidoTest.java:31)

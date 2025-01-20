@@ -75,10 +75,8 @@ public class JpaClienteDao implements ClienteDao {
                     .getSingleResult();
             return cliente;
         } catch (NoResultException e) {
-            // Si no se encuentra ningún resultado, devuelve null
             return null;
         } catch (Exception e) {
-            // Manejo de errores
             throw new SQLException("Error al obtener el cliente por email y nombre: " + e.getMessage() + ". Email: " + email, e);
         }
     }
@@ -100,10 +98,9 @@ public class JpaClienteDao implements ClienteDao {
     @Override
     public boolean save(Cliente cliente) throws SQLException {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+
         try (entityManager) {
-
             Cliente clienteExiste = getAllCustomers().stream().filter(x -> x.getNombre().equals(cliente.getNombre())).findFirst().orElse(null);
-
             if (clienteExiste == null) {
                 entityManager.getTransaction().begin();
                 entityManager.merge(cliente);
@@ -114,9 +111,6 @@ public class JpaClienteDao implements ClienteDao {
             }
 
         } catch (Exception e) {
-            if (entityManager != null && entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
             throw new SQLException("Error al guardar el cliente: " + e.getMessage() + ". Cliente: " + cliente, e);
         }
     }
