@@ -125,7 +125,6 @@ public class Pedido {
         sb.append("id=").append(id);
         sb.append(", fecha=").append(fecha);
         sb.append(", estado=").append(estado);
-
         sb.append('}');
         return sb.toString();
     }

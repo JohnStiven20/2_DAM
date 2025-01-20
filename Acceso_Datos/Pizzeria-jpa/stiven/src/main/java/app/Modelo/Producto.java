@@ -29,12 +29,8 @@ public class Producto {
     protected double precio;
     @Enumerated(EnumType.STRING)
     private Size size;
-    @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
 
-    /*
-     *  PUEDE DAR ERROR EN LA LISTA
-     */
-
+    @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
     private List<Ingrediente> ingredientes;
     
     protected Producto(String nombre, double precio) {
