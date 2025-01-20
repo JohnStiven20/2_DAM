@@ -3,6 +3,7 @@ import 'package:loginflutter/generated/l10n.dart';
 import 'package:loginflutter/utils/global.colors.dart';
 import 'package:loginflutter/view/widgets/social.login.dart';
 import 'package:loginflutter/view/widgets/button.global.dart';
+import 'package:loginflutter/view/widgets/dialogos_pages.dart';
 import 'package:loginflutter/view/widgets/text.form.global.dart';
 
 class RegisterView extends StatelessWidget {
@@ -12,8 +13,11 @@ class RegisterView extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController passwordConfirmerController = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -73,12 +77,13 @@ class RegisterView extends StatelessWidget {
                   height: 10,
                 ),
                 ButtonGlobal(
-                  onTap: () {},
+                  onTap: () {
+                  },
                 ),
                 const SizedBox(
                   height: 25,
                 ),
-                SocialLogin()
+                SocialLogin(),
               ],
             ),
           ),

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:loginflutter/generated/l10n.dart';
+import 'package:loginflutter/view/home.view.dart';
 import 'package:loginflutter/view/register.view.dart';
 import 'package:loginflutter/utils/global.colors.dart';
 import 'package:loginflutter/view/widgets/social.login.dart';
@@ -12,6 +13,50 @@ class LoginView extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  // Función para validar credenciales y navegar
+  void _navigateToHomeView(BuildContext context) {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    if (email == "profe@gmail.com" && password == "12345") {
+      Get.to(() => HomeView());
+    } else {
+      _mostrarDialogo(context);
+    }
+  }
+
+  void _mostrarDialogo(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error a logear'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Column(
+                children: [
+                  Text('Contraseña o email incorrecto', style: TextStyle(
+                    color: Colors.red
+                  ),),
+                  SizedBox(height: 10),
+                  Text("email: profe@gmail.com y contraseña: 12345")
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+
+    // Cierra el diálogo después de 5 segundos
+    Future.delayed(const Duration(seconds: 3), () {
+      if (Navigator.canPop(context)) {
+        Navigator.of(context).pop();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,48 +74,48 @@ class LoginView extends StatelessWidget {
                   child: Text(
                     'CigniFi',
                     style: TextStyle(
-                        color: GlobalColors.mainColor,
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
+                      color: GlobalColors.mainColor,
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 Text(
                   S.current.Mensage,
                   style: TextStyle(
-                      color: GlobalColors.textColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
+                    color: GlobalColors.textColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
+                const SizedBox(height: 15),
                 TextFormGlobal(
                   controller: emailController,
                   text: S.current.email,
                   obscure: false,
                   textInputType: TextInputType.emailAddress,
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 TextFormGlobal(
-                    controller: passwordController,
-                    text: S.current.password,
-                    textInputType: TextInputType.text,
-                    obscure: true),
-                const SizedBox(
-                  height: 10,
+                  controller: passwordController,
+                  text: S.current.password,
+                  textInputType: TextInputType.text,
+                  obscure: true,
                 ),
-                ButtonGlobal(onTap: () {
-                  Get.to(() => RegisterView());
-                }),
-                const SizedBox(
-                  height: 25,
+                const SizedBox(height: 20),
+                ButtonGlobal(
+                  onTap: () => _navigateToHomeView(context),
                 ),
-                SocialLogin()
+                const SizedBox(height: 25),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () => _mostrarDialogo(context),
+                    child: const Text('Mostrar diálogo'),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                SocialLogin(),
               ],
             ),
           ),
@@ -82,15 +127,16 @@ class LoginView extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              S.current.Signp,
-            ),
+            Text(S.current.Signp),
             InkWell(
-              child: Text(
-                S.current.loge,
-                style: TextStyle(color: GlobalColors.mainColor),
+              child: TextButton(
+                child: Text(
+                  S.current.loge,
+                  style: TextStyle(color: GlobalColors.mainColor),
+                ),
+                onPressed: () => Get.to(() => RegisterView()),
               ),
-            )
+            ),
           ],
         ),
       ),
